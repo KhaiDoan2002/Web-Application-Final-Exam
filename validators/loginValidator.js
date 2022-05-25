@@ -1,6 +1,6 @@
-const { check } = require('express-validator')
+const { check, body } = require('express-validator')
 const User = require('../models/UserModel')
-
+const BlockUser = require('../models/BlockUserModel')
 module.exports = [
     check('username')
         .exists().withMessage('Vui lòng nhập tên đăng nhập')
@@ -15,6 +15,14 @@ module.exports = [
                         if (account.email !== 'admin@gmail.com') {
                             if (account.failAccess >= 3)
                                 throw new Error("Tài khoản của bạn đã bị khóa")
+                            return BlockUser.findOne({ username: value })
+                                .then(block => {
+                                    if (block) {
+                                        let time = 60 - Math.floor((Date.now() - block.creatAt) / 1000)
+                                        let second = time < 0 ? 0 : time
+                                        throw new Error('Tài khoản của bạn đang bị tạm khóa vui lòng thử lại sau: ' + second + 's')
+                                    }
+                                })
                         }
                         return true
                     }

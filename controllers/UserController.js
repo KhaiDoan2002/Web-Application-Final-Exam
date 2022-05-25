@@ -5,7 +5,7 @@ const User = require('../models/UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Token = require('../models/TokenModel')
-
+const BlockUser = require('../models/BlockUserModel')
 function fileValidator(req) {
     let message
     if (!req.files['frontID']) {
@@ -166,6 +166,11 @@ const UserController = {
                     if (!match) {
                         account.failAccess = (account.failAccess + 1)
                         req.session.failAccess = account.failAccess
+                        const block = new BlockUser({
+                            UserEmail: account.email,
+                            username: account.username
+                        })
+                        block.save()
                         return account.save((err, data) => {
                             if (err)
                                 console.log(err)
@@ -190,6 +195,7 @@ const UserController = {
                                 } else {
                                     req.session.username = username
                                     req.session.token = token
+                                    BlockUser.findOneAndDelete({username : username})
                                     req.flash('success', 'Đăng nhập thành công')
                                     res.redirect('/user/')
 

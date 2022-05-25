@@ -45,9 +45,6 @@ const roleVerifyOTP = (req, res, next) => {
 }
 
 
-
-
-
 module.exports = {
     getUser,
     multipleUpload,
