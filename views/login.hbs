@@ -25,6 +25,13 @@
                                                     placeholder="Mật khẩu" autocomplete="off">
                                                 <i class="input-icon uil uil-lock-alt"></i>
                                             </div>
+                                            
+                                            {{#if success}}
+                                            <div class="alert alert-success mt-2 ">
+                                                {{success}}
+                                            </div>
+
+                                            {{/if}}
                                             {{#if fail}}
 
                                             <div id="failAccess" class="alert alert-danger mt-2"></div>
@@ -41,7 +48,8 @@
                                             </div>
                                             {{/if}}
                                             <button type="submit" class="btn mt-4">Đăng nhập</button>
-                                            <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Quên mật
+                                            <p class="mb-0 mt-4 text-center"><a href="/user/restorePassword"
+                                                    class="link">Quên mật
                                                     khẩu?</a></p>
                                             <p class="mb-0 mt-4 text-center">Nếu bạn chưa có tài khoản? <a
                                                     href="/user/register" class="link">Tạo tài

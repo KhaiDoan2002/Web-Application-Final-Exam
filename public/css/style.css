@@ -296,6 +296,7 @@ h6 span {
     background-color: #ffeba7;
     color: #102770;
     box-shadow: 0 8px 24px 0 rgba(255, 235, 167, .2);
+    animation: btn-appear 1s;
 }
 
 .btn:active,
@@ -312,7 +313,17 @@ h6 span {
 }
 
 
+@keyframes btn-appear {
+    from {
+        opacity: 0;
+        padding: 0;
+    }
 
+    to {
+        opacity: 100%;
+        padding: 0 30;
+    }
+}
 
 .logo {
     position: absolute;

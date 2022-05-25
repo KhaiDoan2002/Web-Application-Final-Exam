@@ -6,25 +6,43 @@ const UserController = require('../controllers/UserController')
 const checkLogin = require('../auth/checkLogin')
 const checkUser = require('../auth/checkUser')
 const resetPasswordValidator = require('../validators/resetPasswordValidator')
+const restorePasswordValidator = require('../validators/restorePasswordValidator')
+const verifyOTPValidator = require('../validators/verifyOTPValidator')
+const resetPasswordByOTPValidator = require('../validators/resetPasswordByOTPValidator')
 const middleware = require('../middleware/index')
 
+// Register
 router.get('/register', UserController.getRegister)
-// Add one
 router.post('/register', middleware.multipleUpload, registerValidator, UserController.postRegister)
-    
-router.get('/login',middleware.roleLogin, UserController.getLogin)
 
+// Login
+router.get('/login', middleware.roleLogin, UserController.getLogin)
 router.post('/login', loginValidator, UserController.postLogin)
 
+// Logout
 router.get('/logout', UserController.getLogout)
 
+// Index page
 router.get('/', checkLogin, checkUser, UserController.getIndex)
 
+// Reset Password In First Access
 router.get('/resetPassword', checkLogin, middleware.roleResetPassword, UserController.getResetPassword)
 router.post('/resetPassword', resetPasswordValidator, middleware.getUser, UserController.postResetPassword)
-// Get All
-router.get('/getUsers', checkLogin, checkUser, UserController.getUserInfo)
-// Get one
-// Update one
-// Delete one
+
+// Restore Password
+router.get('/restorePassword', UserController.getRestorePassword)
+router.post('/restorePassword', restorePasswordValidator, UserController.postRestorePassword)
+
+// Verify OTP
+router.get('/verifyOTP', middleware.roleVerifyOTP, UserController.getVerifyOTP)
+router.post('/verifyOTP', verifyOTPValidator, UserController.postVerifyOTP)
+
+// Resend OTP
+router.get('/resendOTP', middleware.roleVerifyOTP, UserController.getResendOTP)
+
+// Reset Password By OTP 
+router.get('/resetPasswordByOTP', middleware.roleResetPasswordByOTP, UserController.getResetPassword)
+router.post('/resetPasswordByOTP', resetPasswordByOTPValidator, UserController.postResetPasswordByOTP)
+
+
 module.exports = router

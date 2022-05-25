@@ -7,6 +7,7 @@ module.exports = (req, res, next) => {
         req.flash('error', 'Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại')
         return res.redirect('/user/login')
     }
+    
     const { JWT_SECRET } = process.env
 
     jwt.verify(token, JWT_SECRET, (err, data) => {

@@ -4,8 +4,7 @@ const nodemailer = require('nodemailer')
 const User = require('../models/UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
-
+const Token = require('../models/TokenModel')
 
 function fileValidator(req) {
     let message
@@ -23,11 +22,13 @@ function hashPassword(password) {
     return bcrypt.hashSync(password, salt)
 }
 
+
+
 const UserController = {
-    getIndex: function (req, res, next) {
+    getIndex: function (req, res) {
         res.render('index')
     },
-    getRegister: function (req, res, next) {
+    getRegister: function (req, res) {
         const error = req.flash('error') || ""
         const email = req.flash('email') || ""
         const fullname = req.flash('fullname') || ""
@@ -36,7 +37,7 @@ const UserController = {
         const birth = req.flash('birth') || ""
         res.render('register', { error: error, email, fullname, phone, address, birth })
     },
-    postRegister: function (req, res, next) {
+    postRegister: function (req, res) {
         let result = validationResult(req)
         let message = fileValidator(req) || ''
 
@@ -137,7 +138,7 @@ const UserController = {
         res.redirect('/user/register')
     },
 
-    getLogin: function (req, res, next) {
+    getLogin: function (req, res) {
         const error = req.flash('error') || ""
         const username = req.flash('username') || ""
         const fail = req.flash('fail') || false
@@ -145,7 +146,7 @@ const UserController = {
         res.render('login', { error, success, username, fail })
     },
 
-    postLogin: function (req, res, next) {
+    postLogin: function (req, res) {
         let result = validationResult(req)
         let errorLength = result.errors.length
         if (errorLength === 0) {
@@ -169,7 +170,6 @@ const UserController = {
                             if (err)
                                 console.log(err)
                             else {
-                                // req.flash('error', 'Mật khẩu không đúng')
                                 req.flash('fail', true)
                                 res.redirect('/user/login');
                             }
@@ -213,24 +213,24 @@ const UserController = {
         }
     },
 
-    getLogout: function (req, res, next) {
+    getLogout: function (req, res) {
         req.session.destroy();
         res.redirect('/');
     },
 
-    getUserInfo: function (req, res, next) {
+    getUserInfo: function (req, res) {
         res.json({ code: 0, message: "test thành công" })
     },
 
-    getResetPassword: function (req, res, next) {
+    getResetPassword: function (req, res) {
         const error = req.flash('error') || ""
-        const oldPass = req.flash('oldPass') || ""
         const newPass = req.flash('newPass') || ""
         const rePass = req.flash('rePass') || ""
-        res.render('resetPassword', { error, oldPass, newPass, rePass })
+        const success = req.flash('success') || ""
+        res.render('resetPassword', { error, newPass, rePass, success })
     },
 
-    postResetPassword: function (req, res, next) {
+    postResetPassword: function (req, res) {
         let result = validationResult(req)
         if (result.errors.length === 0) {
             User.findOneAndUpdate({ username: req.session.username }, {
@@ -249,15 +249,167 @@ const UserController = {
                 message = result[m].msg
                 break
             }
-            const { oldPass, newPass, rePass } = req.body
+            const { newPass, rePass } = req.body
             req.flash('error', message)
-            req.flash('oldPass', oldPass)
             req.flash('rePass', rePass)
             req.flash('newPass', newPass)
             res.redirect('/user/')
         }
 
+    },
+
+    getRestorePassword: function (req, res) {
+        const error = req.flash('error') || ''
+        const email = req.flash('email') || ''
+        const phone = req.flash('phone') || ''
+        res.render('restorePassword', { error, email, phone })
+    },
+
+    postRestorePassword: function (req, res) {
+        let result = validationResult(req)
+        if (result.errors.length === 0) {
+            const { email, phone } = req.body
+            req.session.email = email
+            req.session.phone = phone
+            res.cookie('email', email)
+            res.cookie('phone', phone)
+            sendEmailVerify(req, res, email)
+        } else {
+            result = result.mapped()
+            let message
+            for (m in result) {
+                message = result[m].msg
+                break
+            }
+            const { email, phone } = req.body
+            req.flash('error', message)
+            req.flash('email', email)
+            req.flash('phone', phone)
+            res.redirect('/user/restorePassword')
+        }
+    },
+
+    getVerifyOTP: function (req, res) {
+        const error = req.flash('error') || ''
+        const code = req.flash('code') || ''
+        res.render('verifyOTP', { error, code })
+    },
+
+    postVerifyOTP: function (req, res) {
+        let result = validationResult(req)
+        if (result.errors.length === 0) {
+            const code = req.body.code
+            return Token.findOneAndDelete({ code: code })
+                .then(result => {
+                    const email = result.UserEmail
+                    User.findOneAndUpdate({ email: email }, {
+                        failAccess: 0,
+                        active: false
+                    }, (err, data) => {
+                        if (!err) {
+                            const username = data.username
+                            req.session.username = username
+                            res.redirect('/user/resetPasswordByOTP')
+                        }
+                    })
+                })
+        } else {
+            result = result.mapped()
+            let message
+            for (m in result) {
+                message = result[m].msg
+                break
+            }
+            const { code } = req.body
+            req.flash('error', message)
+            req.flash('code', code)
+            res.redirect('/user/verifyOTP')
+        }
+    },
+
+    getResendOTP: function (req, res) {
+        const email = req.cookies.email
+        sendEmailVerify(req, res, email)
+    },
+
+    postResetPasswordByOTP: function (req, res) {
+        let result = validationResult(req)
+        if (result.errors.length === 0) {
+            User.findOneAndUpdate({ username: req.session.username }, {
+                password: hashPassword(req.body.newPass),
+                active: true
+            }, (err, data) => {
+                if (err)
+                    console.log(err)
+                else {
+                    req.flash('success', 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại')
+                    res.redirect('/user/login')
+                }
+            })
+        } else {
+            result = result.mapped()
+            let message
+            for (m in result) {
+                message = result[m].msg
+                break
+            }
+            const { newPass, rePass } = req.body
+            req.flash('error', message)
+            req.flash('rePass', rePass)
+            req.flash('newPass', newPass)
+            res.redirect('/user/')
+        }
     }
+}
+
+function sendEmailVerify(req, res, email) {
+    const { JWT_SECRET } = process.env
+    const code = `${Math.floor(1000 + Math.random() * 9000)}`
+    return jwt.sign({ code: code }, JWT_SECRET, { expiresIn: '1m' }, (err, codeToken) => {
+        if (err)
+            console.log(err)
+        else {
+            req.session.codeToken = codeToken
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                auth: {
+                    user: 'cole.ryan34@ethereal.email',
+                    pass: 'WrFuT2SyNK7KzjFwvV'
+                }
+            });
+
+            const msg = {
+                from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
+                to: `${email}`,
+                subject: "Mã OTP đặt lại mật khẩu ✔",
+                text: "Vui lòng không tiết lộ mã này với bất kì ai",
+                html: `
+                            <h2>OTP: ${code}</h2>
+                            <h2>Token: ${codeToken}</h2>
+                        `
+            }
+            const UserToken = {
+                UserEmail: email,
+                code: code,
+                token: codeToken
+            }
+
+            return new Token(UserToken).save()
+                .then(() => {
+                    transporter.sendMail(msg, (err, success) => {
+                        if (err)
+                            console.log(err)
+                        else {
+                            console.log('Sending OTP successfully')
+                        }
+                    })
+                    // res.json({ code: 1, message: 'đăng ký token thành công', code: code, email: email, token: codeToken })
+                    res.redirect('/user/verifyOTP')
+                })
+
+        }
+    })
 }
 
 module.exports = UserController
