@@ -13,14 +13,15 @@ module.exports = [
                         throw new Error('Tài khoản không tồn tại')
                     else {
                         if (account.email !== 'admin@gmail.com') {
-                            if (account.failAccess >= 3)
-                                throw new Error("Tài khoản của bạn đã bị khóa")
+                            if (account.failAccess >= 3) {
+                                throw new Error("Tài khoản của bạn đã bị khóa do nhập sai mật khẩu nhiều lần, vui lòng liên hệ quản trị viên để được hỗ trợ")
+                            }
+                            if (account.status === 'Disabled')
+                                throw new Error('Tài khoản này đã bị vô hiệu hóa, vui lòng liên hệ tổng đài 18001008')
                             return BlockUser.findOne({ username: value })
                                 .then(block => {
                                     if (block) {
-                                        let time = 60 - Math.floor((Date.now() - block.creatAt) / 1000)
-                                        let second = time < 0 ? 0 : time
-                                        throw new Error('Tài khoản của bạn đang bị tạm khóa vui lòng thử lại sau: ' + second + 's')
+                                        throw new Error('Tài khoản của bạn đang bị tạm khóa vui lòng thử lại sau 1 phút')
                                     }
                                 })
                         }

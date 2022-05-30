@@ -1,11 +1,16 @@
 const { validationResult } = require('express-validator')
 const fs = require('fs')
 const nodemailer = require('nodemailer')
-const User = require('../models/UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Token = require('../models/TokenModel')
 const BlockUser = require('../models/BlockUserModel')
+
+const User = require('../models/UserModel')
+const CreditCard = require('../models/CreditCard')
+const OTP = require('../models/OTP')
+const Provider = require('../models/Provider')
+
 function fileValidator(req) {
     let message
     if (!req.files['frontID']) {
@@ -22,7 +27,55 @@ function hashPassword(password) {
     return bcrypt.hashSync(password, salt)
 }
 
+function sendEmailVerify(req, res, email) {
+    const { JWT_SECRET } = process.env
+    const code = `${Math.floor(1000 + Math.random() * 9000)}`
+    return jwt.sign({ code: code }, JWT_SECRET, { expiresIn: '1m' }, (err, codeToken) => {
+        if (err)
+            console.log(err)
+        else {
+            req.session.codeToken = codeToken
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                auth: {
+                    user: 'cole.ryan34@ethereal.email',
+                    pass: 'WrFuT2SyNK7KzjFwvV'
+                }
+            });
 
+            const msg = {
+                from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
+                to: `${email}`,
+                subject: "Mã OTP đặt lại mật khẩu ✔",
+                text: "Vui lòng không tiết lộ mã này với bất kì ai",
+                html: `
+                            <h2>OTP: ${code}</h2>
+                            <h2>Token: ${codeToken}</h2>
+                        `
+            }
+            const UserToken = {
+                UserEmail: email,
+                code: code,
+                token: codeToken
+            }
+
+            return new Token(UserToken).save()
+                .then(() => {
+                    transporter.sendMail(msg, (err, success) => {
+                        if (err)
+                            console.log(err)
+                        else {
+                            console.log('Sending OTP successfully')
+                        }
+                    })
+                    // res.json({ code: 1, message: 'đăng ký token thành công', code: code, email: email, token: codeToken })
+                    res.redirect('/user/verifyOTP')
+                })
+
+        }
+    })
+}
 
 const UserController = {
     getIndex: function (req, res) {
@@ -48,7 +101,6 @@ const UserController = {
             const username = new Date().getTime().toString().slice(-11, -1);
             const { email } = req.body
             return fs.mkdir(userDir, () => {
-
                 const hash = hashPassword(password)
                 // Create transport
                 // const transporter = nodemailer.createTransport({
@@ -68,8 +120,8 @@ const UserController = {
                     host: 'smtp.ethereal.email',
                     port: 587,
                     auth: {
-                        user: 'leatha.schultz15@ethereal.email',
-                        pass: 'Gyj2RXW4Uw7rcCWFux'
+                        user: 'pansy.mann78@ethereal.email',
+                        pass: '2Xfx1qFbAfAcyRurJz'
                     }
                 });
 
@@ -165,6 +217,10 @@ const UserController = {
                 .then(match => {
                     if (!match) {
                         account.failAccess = (account.failAccess + 1)
+                        if (account.failAccess == 3) {
+                            account.status = 'Locked'
+                            account.blockAt = Date.now()
+                        }
                         req.session.failAccess = account.failAccess
                         const block = new BlockUser({
                             UserEmail: account.email,
@@ -195,7 +251,7 @@ const UserController = {
                                 } else {
                                     req.session.username = username
                                     req.session.token = token
-                                    BlockUser.findOneAndDelete({username : username})
+                                    BlockUser.findOneAndDelete({ username: username })
                                     req.flash('success', 'Đăng nhập thành công')
                                     res.redirect('/user/')
 
@@ -365,57 +421,325 @@ const UserController = {
             req.flash('newPass', newPass)
             res.redirect('/user/')
         }
+    },
+
+    getDepositPage: function (req, res, next) {
+        User.findOne({ username: req.session.username })
+            .then(user => {
+                const balance = user.balance;
+                const error = req.flash('error') || '';
+                return res.render('deposit', { error, balance });
+            })
+            .catch(next);
+
+    },
+
+    postDepositPage: function (req, res, next) {
+        // checkErrorInput(req, res, '/user/deposit')
+
+        const { card_no, expired, cvv_code, amount } = req.body;
+
+        CreditCard.findOne({ card_no })
+            .then(card => {
+                // if (!card) {
+                //     req.flash('error', 'Số thẻ không chính xác');
+                //     return res.redirect('/user/deposit');
+                // }
+
+                // const cardExpired = normalizeDate(card.expired);
+
+                // if (cardExpired != expired) {
+                //     req.flash('error', 'Sai ngày hết hạn');
+                //     return res.redirect('/user/deposit');
+                // }
+
+                // if (card.cvv_code !== cvv_code) {
+                //     req.flash('error', 'Sai mã CVV');
+                //     return res.redirect('/user/deposit');
+                // }
+
+                var amountInt = parseInt(amount);
+
+                if (amountInt > card.balance) {
+                    req.flash('error', 'Số dư trong thẻ không đủ');
+                    return res.redirect('/user/deposit');
+                }
+
+                card.balance -= amountInt;
+                card.save();
+
+                req.getUser.balance += amountInt;
+                req.getUser.history.push(
+                    {
+                        action: 'Nạp tiền',
+                        amount: amountInt,
+                        fee: 0,
+                        createdAt: new Date(),
+                        status: 'Hoàn thành'
+                    }
+                );
+                req.getUser.save();
+                req.flash('success', 'Nạp tiền thành công');
+                return res.redirect('/user/')
+            })
+            .catch(next);
+    },
+
+    getWithdrawPage: function (req, res, next) {
+        User.findOne({ username: req.session.username })
+            .then(user => {
+                const balance = user.balance;
+                const error = req.flash('error') || '';
+                return res.render('withdraw', { error, balance });
+            })
+            .catch(next);
+    },
+
+    postWithdrawPage: function (req, res, next) {
+        checkErrorInput(req, res, '/user/withdraw');
+
+        const { card_no, expired, cvv_code, amount, note } = req.body;
+
+        let isOver = stopWithdraw(req.getUser);
+        if (isOver) {
+            req.flash('error', 'Đã hết số lần giao dịch');
+            return res.redirect('/user/withdraw');
+        }
+
+        var amountInt = parseInt(amount);
+
+        if (amountInt % 50000 != 0) {
+            req.flash('error', 'Số tiền rút phải là bội số của 50000');
+            return res.redirect('/user/withdraw');
+        }
+
+        if ((amountInt * 105 / 100) > req.getUser.balance) {
+            req.flash('error', 'Số dư trong ví không đủ');
+            return res.redirect('/user/withdraw');
+        }
+
+        CreditCard.findOne({ card_no })
+            .then(card => {
+                if (!card) {
+                    req.flash('error', 'Số thẻ không chính xác');
+                    return res.redirect('/user/withdraw');
+                }
+
+                const cardExpired = normalizeDate(card.expired);
+
+                if (cardExpired != expired) {
+                    req.flash('error', 'Sai ngày hết hạn');
+                    return res.redirect('/user/withdraw');
+                }
+
+                if (card.cvv_code !== cvv_code) {
+                    req.flash('error', 'Sai mã CVV');
+                    return res.redirect('/user/withdraw');
+                }
+
+                var trade = {
+                    action: 'Rút tiền',
+                    amount: amountInt,
+                    fee: amountInt * 5 / 100,
+                    note: note,
+                    createdAt: new Date(),
+                    status: (amountInt > 5000000) ? 'Đang chờ duyệt' : 'Hoàn thành',
+                }
+                req.getUser.history.push(trade);
+
+                if (trade.status === 'Hoàn thành') {
+                    req.getUser.balance -= (amountInt * 105 / 100);
+                    req.getUser.save();
+
+                    card.balance += amountInt;
+                    card.save();
+                    req.flash('success', 'Rút tiền thành công');
+                }
+                else {
+                    req.getUser.save();
+                    req.flash('success', 'Yêu cầu rút tiền thành công. Vui lòng chờ xét duyệt');
+                }
+
+                return res.redirect('/user');
+            })
+            .catch(next);
+    },
+
+    getTransferPage: function (req, res, next) {
+        User.findOne({ username: req.session.username })
+            .then(user => {
+                const balance = user.balance;
+                const error = req.flash('error') || '';
+                return res.render('transfer', { error, balance });
+            })
+            .catch(next);
+    },
+
+    postTransferPage: function (req, res, next) {
+        checkErrorInput(req, res, '/user/transfer');
+
+        const { phone, email, amount, note, isFeePayer } = req.body;
+
+        User.findOne({ phone })
+            .then(receiver => {
+                if (!receiver) {
+                    req.flash('error', 'Tài khoản này không tồn tại');
+                    return res.redirect('/user/transfer');
+                }
+
+                var amountInt = parseInt(amount);
+                var total = (isFeePayer) ? amountInt * 105 / 100 : amountInt;
+
+                if (total > req.getUser.balance) {
+                    req.flash('error', 'Số dư trong ví không đủ');
+                    return res.redirect('/user/transfer');
+                }
+
+                var trade = {
+                    action: 'Chuyển tiền',
+                    receiver: receiver.fullname,
+                    amount: amountInt,
+                    fee: (isFeePayer) ? (amountInt * 5 / 100) : 0,
+                    note: note,
+                    createdAt: new Date(),
+                    status: (amountInt > 5000000) ? 'Đang chờ duyệt' : 'Hoàn thành',
+                }
+
+                const OTPCode = `${Math.floor(100000 + Math.random() * 900000)}`
+                const transporter = nodemailer.createTransport({
+                    host: process.env.TRANSPORTER_HOST,
+                    port: process.env.TRANSPORTER_PORT,
+                    auth: {
+                        user: process.env.TRANSPORTER_USER,
+                        pass: process.env.TRANSPORTER_PASS
+                    }
+                });
+                const msg = {
+                    from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
+                    to: `${email}`,
+                    subject: "Mã OTP xác nhận chuyển tiền ✔",
+                    text: "Vui lòng không tiết lộ mã này với bất kì ai",
+                    html: `
+                                <h2>OTP: ${OTPCode}</h2>
+                            `
+                }
+                const otp = {
+                    UserEmail: email,
+                    code: OTPCode,
+                }
+
+                return new OTP(otp).save()
+                    .then(() => {
+                        transporter.sendMail(msg, (err, success) => {
+                            if (err) {
+                                console.log(err)
+                            } else {
+                                console.log('Sending OTP successfully')
+                                req.flash('name', receiver.fullname);
+                                req.flash('amount', amountInt);
+                                req.flash('fee', trade.fee);
+                                req.flash('note', trade.note);
+                                req.session.phone = phone;
+                                req.session.email = email;
+                                req.session.trade = trade;
+                                res.redirect('/user/transfer/confirm');
+                            }
+                        })
+                    })
+            })
+            .catch(next);
+    },
+
+    getTransferConfirm: function (req, res, next) {
+        const receiver = req.flash('name') || '';
+        const amount = req.flash('amount') || 0;
+        const fee = req.flash('fee') || 0;
+        const note = req.flash('note') || '';
+        return res.render('confirm', { receiver, amount, fee, note });
+    },
+
+    postTransferConfirm: function (req, res, next) {
+        const OTPcode = req.body.code
+        OTP.findOneAndDelete({ code: OTPcode })
+            .then(result => {
+                const email = result.UserEmail
+                User.findOne({ email })
+                    .then(async receiver => {
+                        const trade = req.session.trade;
+                        req.getUser.history.push(trade);
+                        if (trade.status === 'Hoàn thành') {
+                            req.getUser.balance -= (trade.amount + trade.fee);
+                            req.getUser.save();
+
+                            receiver.balance += (trade.fee == 0) ? (trade.amount - fee) : trade.amount;
+                            receiver.save();
+                            req.flash('success', 'Chuyển tiền thành công');
+                        }
+                        else {
+                            req.getUser.save();
+                            req.flash('success', 'Yêu cầu chuyển tiền thành công. Vui lòng chờ xét duyệt');
+                        }
+                        return res.redirect('/user');
+                    })
+            })
+            .catch(next);
+    },
+
+    getMobileCardPage: function (req, res, next) {
+        User.findOne({ username: req.session.username })
+            .then(user => {
+                const phone = req.flash('phone') || '';
+                const error = req.flash('error') || '';
+                const balance = user.balance;
+                return res.render('buycard', { error, phone, balance });
+            })
+            .catch(next);
+
+    },
+
+    postMobileCardPage: function (req, res, next) {
+        const { provider_name, card_value, quantity } = req.body;
+
+        var total = card_value * quantity;
+        if (total > req.getUser.balance) {
+            req.flash('error', 'Số dư trong ví không đủ');
+            return res.redirect('/user/buycard');
+        }
+
+        Provider.findOne({ provider_name })
+            .then(provider => {
+                let listCard = [];
+                for (let i = 0; i < quantity; i++) {
+                    var newCard = provider.provider_code + Math.random().toString().slice(-7, -2);
+                    listCard.push(newCard);
+                }
+
+                const trade = {
+                    action: `Mua thẻ ${provider.provider_name}`,
+                    amount: total,
+                    fee: 0,
+                    receive_code: listCard,
+                    createdAt: new Date(),
+                    status: 'Hoàn thành',
+                }
+
+                req.getUser.history.push(trade);
+                req.getUser.balance -= (total + trade.fee);
+                req.getUser.save();
+
+                req.flash('success', 'Mua thẻ thành công');
+                return res.redirect('/user/notification');
+            })
+            .catch(next);
+    },
+
+    getNotificationPage: function (req, res, next) {
+        const success = req.flash('success') || '';
+
+        return res.render('notification', { success })
     }
 }
 
-function sendEmailVerify(req, res, email) {
-    const { JWT_SECRET } = process.env
-    const code = `${Math.floor(1000 + Math.random() * 9000)}`
-    return jwt.sign({ code: code }, JWT_SECRET, { expiresIn: '1m' }, (err, codeToken) => {
-        if (err)
-            console.log(err)
-        else {
-            req.session.codeToken = codeToken
-            const transporter = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
-                auth: {
-                    user: 'cole.ryan34@ethereal.email',
-                    pass: 'WrFuT2SyNK7KzjFwvV'
-                }
-            });
 
-            const msg = {
-                from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
-                to: `${email}`,
-                subject: "Mã OTP đặt lại mật khẩu ✔",
-                text: "Vui lòng không tiết lộ mã này với bất kì ai",
-                html: `
-                            <h2>OTP: ${code}</h2>
-                            <h2>Token: ${codeToken}</h2>
-                        `
-            }
-            const UserToken = {
-                UserEmail: email,
-                code: code,
-                token: codeToken
-            }
-
-            return new Token(UserToken).save()
-                .then(() => {
-                    transporter.sendMail(msg, (err, success) => {
-                        if (err)
-                            console.log(err)
-                        else {
-                            console.log('Sending OTP successfully')
-                        }
-                    })
-                    // res.json({ code: 1, message: 'đăng ký token thành công', code: code, email: email, token: codeToken })
-                    res.redirect('/user/verifyOTP')
-                })
-
-        }
-    })
-}
 
 module.exports = UserController

@@ -1,1 +1,749 @@
-<h1>Home page</h1>
+<nav class="navbar navbar-expand navbar-light bg-faded">
+    <div class="container">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <form class="d-flex my-2 my-lg-0">
+            <input class="form-control me-sm-2" type="text" placeholder="Search" />
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                Search
+            </button>
+        </form>
+    </div>
+</nav>
+<main class="py-3">
+    <div class="container">
+        <div class="row gx-4">
+            <div class="col-lg-4 d-flex flex-column gap-4 mb-4">
+                <div class="rouded-full p-4 rounded-4 fw-bold bg-light">
+                    <span class="border-bottom border-dark border-4 pb-1 d-inline-block mb-3"><i
+                            class="bi bi-wallet-fill me-2"></i>Số dư Ví:</span>
+                    <div class="bg-white px-3 py-2 d-flex justify-content-between align-items-center rounded-2 mb-3">
+                        <span class="text-success h5">1.000.000</span>
+                        <span>VNĐ</span>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button class="border px-3 py-1 rounded-2 bg-transparent border-dark">
+                            Nạp tiền
+                        </button>
+                    </div>
+                </div>
+                <div class="rouded-full p-4 rounded-4 fw-bold bg-light">
+                    <span class="border-bottom border-dark border-4 pb-1 d-inline-block mb-3"><i
+                            class="bi bi-wallet-fill me-2"></i> Dịch vụ</span>
+                    <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-bank me-2"></i>
+                                <span>Nạp tiền</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelWithdraw">
+                                <i class="bi bi-cash me-2"></i>
+                                <span>Rút tiền </span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelTransfer">
+                                <i class="bi bi-arrow-down-up me-2"></i>
+                                <span>Chuyển tiên</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelPhoneCard">
+                                <i class="bi bi-phone me-2"></i>
+                                <span>Mua thẻ điện thoại</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="rounded-4 p-4 border">
+                    <span class="border-bottom border-dark border-4 pb-1 d-inline-block mb-3 fw-bold"><i
+                            class="bi bi-wallet-fill me-2"></i>Lịch sử giao dịch</span>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Loại giao dịch</th>
+                                <th>Số tiền</th>
+                                <th>Thời gian</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-bs-toggle="modal" data-bs-target="#modelHistoryTransferDetail">
+                                <td>
+                                    <i class="bi bi-bank"></i>
+                                </td>
+                                <td>Nạp tiền</td>
+                                <td>1.000.000</td>
+                                <td>01/01/2020</td>
+                                <td class="text-success">
+                                    <i class="bi bi-dot me-1"></i><span>Thành công</span>
+                                </td>
+                            </tr>
+                            <tr data-bs-toggle="modal" data-bs-target="#modelHistoryWithdrawDetail">
+                                <td>
+                                    <i class="bi bi-cash"></i>
+                                </td>
+                                <td>Rút tiền</td>
+                                <td>1.000.000</td>
+                                <td>01/01/2020</td>
+                                <td class="text-danger">
+                                    <i class="bi bi-dot me-1"></i><span>Thất bại</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="bi bi-cash"></i>
+                                </td>
+                                <td>Rút tiền</td>
+                                <td>1.000.000</td>
+                                <td>01/01/2020</td>
+                                <td class="text-secondary">
+                                    <i class="bi bi-dot me-1"></i><span>Đang chờ</span>
+                                </td>
+                            </tr>
+                            <tr data-bs-toggle="modal" data-bs-target="#modelHistoryPhoneCardDetail">
+                                <td>
+                                    <i class="bi bi-phone"></i>
+                                </td>
+                                <td>Mua thẻ điên thoại</td>
+                                <td>1.000.000</td>
+                                <td>01/01/2020</td>
+                                <td class="text-success">
+                                    <i class="bi bi-dot me-1"></i><span>Thành công</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Deposit -->
+        <div class="modal fade" id="modelDeposit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/user/deposit" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nạp tiền</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositCardNumber">Số thẻ</label>
+                                <input name="card_no" type="text" maxlength="6" class="form-control"
+                                    id="inputDepositCardNumber" placeholder="Nhập số thẻ" />
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositCardExpirationDate">Ngày hết hạn</label>
+                                <input name="expired" type="date" class="form-control"
+                                    id="inputDepositCardExpirationDate" placeholder="Nhập ngày hết hạn" />
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositCardCodeCVV">Mã CVV</label>
+                                <input name="cvv_code" type="text" class="form-control" id="inputDepositCardCodeCVV"
+                                    placeholder="Nhập mã CVV" />
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositAmount">Số tiền</label>
+                                <input name="amount" type="password" class="form-control" id="inputDepositAmount"
+                                    placeholder="Nhập số tiền" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Huỷ
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btnNextToDepositConfirm">
+                                Tiếp theo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Deposit Confirm -->
+        <div class="modal fade" id="modelDepositConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/user/deposit" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nạp tiền</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositConfirmCardNumber">Số thẻ</label>
+                                <input name="card_no" type="text" maxlength="6" class="form-control"
+                                    id="inputDepositConfirmCardNumber" placeholder="Số thẻ" disabled />
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositConfirmCardExpirationDate">Ngày hết hạn</label>
+                                <input name="expired" type="date" class="form-control"
+                                    id="inputDepositConfirmCardExpirationDate" placeholder="Ngày hết hạn" disabled />
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositConfirmCardCodeCVV">Mã CVV</label>
+                                <input name="cvv_code" type="text" class="form-control" id="inputDepositCardCodeCVV"
+                                    placeholder="Mã CVV" disabled />
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputDepositConfirmAmount">Số tiền</label>
+                                <input name="amount" type="password" class="form-control" id="inputDepositConfirmAmount"
+                                    placeholder="Số tiền" disabled />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="btnPreviousToDeposit">
+                                Quay lại
+                            </button>
+                            <button type="submit" class="btn btn-primary">Nạp tiền</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Withdraw -->
+        <div class="modal fade" id="modelWithdraw" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/user/withdraw" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Rút tiền</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <!-- Số thẻ -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputWithdrawCardNumber">Số thẻ</label>
+                                <input name="card-no" type="text" maxlength="6" class="form-control"
+                                    id="inputWithdrawCardNumber" placeholder="Nhập số thẻ" />
+                            </div>
+                            <!-- Ngày hết hạn -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputWithdrawCardExpirationDate">Ngày hết hạn</label>
+                                <input name="expired" type="date" class="form-control"
+                                    id="inputWithdrawCardExpirationDate" placeholder="Nhập ngày hết hạn" />
+                            </div>
+                            <!-- Mã CVV -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputWithdrawCardCodeCVV">Mã CVV</label>
+                                <input name="cvv_code" type="text" class="form-control" id="inputWithdrawCardCodeCVV"
+                                    placeholder="Nhập mã CVV" />
+                            </div>
+                            <!-- Ghi chú -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputWithdrawNote">Ghi chú</label>
+                                <textarea name="note" type="text" class="form-control"
+                                    id="inputWithdrawNote"></textarea>
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputWithdrawAmountToWithdraw">Số tiền</label>
+                                <input name="amount" type="text" class="form-control" id="inputWithdrawAmountToWithdraw"
+                                    placeholder="Nhập số tiền" />
+                                <span class="text-danger d-none" id="alertWithdrawAmountToWithdraw">Số tiền phải là bội
+                                    của
+                                    50,000 đồng</span>
+                            </div>
+                            <!-- Phí rút input disable -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputWithdrawFee">Phí rút(5%)</label>
+                                <input type="text" class="form-control" id="inputWithdrawFee" value="" disabled />
+                            </div>
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputWithdrawTotalAmount">Tổng số tiền</label>
+                                <input type="text" class="form-control" id="inputWithdrawTotalAmount" value=""
+                                    disabled />
+                            </div>
+                            <span class="text-primary">Lưu ý: Với số tiên rút trên 5,000,000 đồng sẽ cân thời gian
+                                thực hiện giao dịch.</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Huỷ
+                            </button>
+                            <button type="button" class="btn btn-primary">Rút tiền</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Transfer -->
+        <div class="modal fade" id="modelTransfer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/user/transfer" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chuyển tiền</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <!-- Số thẻ -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferCardNumber">Số điện thoại</label>
+                                <input name="phone" type="text" class="form-control" id="inputTransferCardNumber"
+                                    placeholder="Nhập số điện thoại người nhận" />
+                            </div>
+                            <!-- Tên người nhận -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferName">Tên người nhận</label>
+                                <input name="email" type="text" class="form-control" id="inputTransferName"
+                                    placeholder="Tên người nhận" disabled />
+                            </div>
+                            <!-- Số tiền -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferAmount">Số tiền</label>
+                                <input name="amount" type="text" class="form-control" id="inputTransferAmount"
+                                    placeholder="Nhập số tiền" />
+                                <span class="text-danger" id="alertTransferAmount">Số tiền phải là bội của 50,000
+                                    đồng</span>
+                            </div>
+                            <!-- Ghi chú -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferNote">Ghi chú</label>
+                                <textarea name="note" class="form-control" id="inputTransferNote">
+                  </textarea>
+                            </div>
+                            <!-- Lựa chọn bên chịu phí -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferFee">Bên chịu phí</label>
+                                <select name="isFeePayer" class="form-control" id="inputTransferFee">
+                                    <option value="0">Bên nhận</option>
+                                    <option value="1">Bên gửi</option>
+                                </select>
+                                <!-- Lưu ý -->
+                                <span class="text-primary">Lưu ý: Với số tiên chuyển trên 5,000,000 đồng sẽ cân thời
+                                    gian thực hiện giao dịch.</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Huỷ
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btnNextToTransferConfirm">
+                                Tiếp tục
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Transfer Confirm -->
+        <div class="modal fade" id="modelTransferConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/user/transfer" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chuyển tiền</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <!-- Số thẻ -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferConfirmCardNumber">Số điện thoại</label>
+                                <input name="phone" type="text" class="form-control" id="inputTransferConfirmCardNumber"
+                                    placeholder="Số điện thoại người nhận" disabled />
+                            </div>
+                            <!-- Tên người nhận -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferConfirmName">Tên người nhận</label>
+                                <input name="email" type="text" class="form-control" id="inputTransferConfirmName"
+                                    placeholder="Tên người nhận" disabled />
+                            </div>
+                            <!-- Số tiền -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferConfirmAmount">Số tiền</label>
+                                <input name="amount" type="text" class="form-control" id="inputTransferConfirmAmount"
+                                    placeholder="Số tiền" disabled />
+                            </div>
+                            <!-- Ghi chú -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferConfirmNote">Ghi chú</label>
+                                <textarea name="note" type="text" class="form-control" id="inputTransferConfirmNote"
+                                    disabled>
+                  </textarea>
+                            </div>
+                            <!-- Lựa chọn bên chịu phí -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputTransferConfirmFee">Bên chịu phí</label>
+                                <select name="isFeePayer" class="form-control" id="inputTransferFee" disabled>
+                                    <option value="0">Bên nhận</option>
+                                    <option value="1">Bên gửi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="btnPreviousToTransfer">
+                                Quay lại
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                Chuyển tiền
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal OTP -->
+        <div class="modal fade" id="modelOTP" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/user/transfer/confirm" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Xác nhận OTP</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <!-- OTP -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputOTP">OTP</label>
+                                <input name="code" type="text" class="form-control" id="inputOTP"
+                                    placeholder="Nhập OTP" />
+                                <!-- Đếm ngược thời gian nhập -->
+                                <div class="d-flex flex-row gap-1">
+                                    <span class="text-primary">Thời gian còn lại: </span>
+                                    <span class="text-primary" id="countdown">60</span>
+                                </div>
+                                <span class="text-danger" id="alertOTP">OTP không đúng</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Huỷ
+                            </button>
+                            <button type="button" class="btn btn-primary">Xác nhận</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Phone Card -->
+        <div class="modal fade" id="modelPhoneCard" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="user/buycard" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Mua thẻ điện thoại</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <!-- Nhà mạng -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputPhoneCardNetwork">Nhà mạng</label>
+                                <select name="provider_name" class="form-control" id="inputPhoneCardNetwork">
+                                    <option value="Viettel">Viettel</option>
+                                    <option value="Mobifone">Mobiphone</option>
+                                    <option value="Vinaphone">Vinaphone</option>
+                                </select>
+                                <!-- Phí giao dịch -->
+                                <div class="d-flex flex-row gap-1">
+                                    <span class="text-primary">Phí giao dịch: </span>
+                                    <span class="text-primary" id="countdown">0 đồng</span>
+                                </div>
+                            </div>
+                            <!-- Mệt giá 10.000, 20.000, 50.000, 100.000 -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputPhoneCardPrice">Mệt giá</label>
+                                <select name="card_value" class="form-control" id="inputPhoneCardPrice">
+                                    <option value="10000">10.000</option>
+                                    <option value="20000">20.000</option>
+                                    <option value="50000">50.000</option>
+                                    <option value="100000">100.000</option>
+                                </select>
+                            </div>
+                            <!-- Số lượng -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputPhoneCardQuantity">Số lượng</label>
+                                <input name="quantity" type="number" min="1" max="5" class="form-control"
+                                    id="inputPhoneCardQuantity" placeholder="Nhập số lượng" value="0" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Huỷ
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btnNextToPhoneCardConfirm">
+                                Tiếp theo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Phone Card Confirm -->
+        <div class="modal fade" id="modelPhoneCardConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/user/buycard" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Mua thẻ điện thoại</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column gap-2">
+                            <!-- Nhà mạng -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputPhoneCardConfirmNetwork">Nhà mạng</label>
+                                <select name="provider_name" class="form-control" id="inputPhoneCardConfirmNetwork"
+                                    disabled>
+                                    <option value="Viettel">Viettel</option>
+                                    <option value="Mobiphone">Mobifone</option>
+                                    <option value="Vinaphone">Vinaphone</option>
+                                </select>
+                                <!-- Phí giao dịch -->
+                                <div class="d-flex flex-row gap-1">
+                                    <span class="text-primary">Phí giao dịch: </span>
+                                    <span class="text-primary" id="countdown">0 đồng</span>
+                                </div>
+                            </div>
+                            <!-- Mệt giá 10.000, 20.000, 50.000, 100.000 -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputPhoneCardConfirmPrice">Mệt giá</label>
+                                <select name="card_value" class="form-control" id="inputPhoneCardConfirmPrice" disabled>
+                                    <option value="10000">10.000</option>
+                                    <option value="20000">20.000</option>
+                                    <option value="50000">50.000</option>
+                                    <option value="100000">100.000</option>
+                                </select>
+                            </div>
+                            <!-- Số lượng -->
+                            <div class="form-group d-flex flex-column gap-1">
+                                <label for="inputPhoneCardConfirmQuantity">Số lượng</label>
+                                <input name="quantity" type="number" min="1" max="5" class="form-control"
+                                    id="inputPhoneCardConfirmQuantity" placeholder="Nhập số lượng" value="0" disabled />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="btnPreviousToPhoneCard">
+                                Quay lại
+                            </button>
+                            <button type="submit" class="btn btn-primary">Mua thẻ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal History Deposit Detail -->
+        <div class="modal fade" id="modelHistoryDepositDetail" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Chi tiết giao dịch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column gap-2">
+                        <!-- Ngày giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailDate">Ngày giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailDate"
+                                placeholder="Ngày giao dịch" disabled />
+                        </div>
+                        <!-- Mã giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailCode">Mã giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailCode"
+                                placeholder="Mã giao dịch" disabled />
+                        </div>
+                        <!-- Trạng thái -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailStatus">Trạng thái</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailStatus"
+                                placeholder="Trạng thái" disabled />
+                        </div>
+                        <!-- Số tiền -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailMoney">Số tiền</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailMoney"
+                                placeholder="Số tiền" disabled />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Huỷ
+                        </button>
+                        <button type="button" class="btn btn-primary">Xác nhận</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal History Withdraw Detail -->
+        <div class="modal fade" id="modelHistoryWithdrawDetail" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Chi tiết giao dịch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column gap-2">
+                        <!-- Ngày giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailDate">Ngày giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailDate"
+                                placeholder="Ngày giao dịch" disabled />
+                        </div>
+                        <!-- Mã giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailCode">Mã giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailCode"
+                                placeholder="Mã giao dịch" disabled />
+                        </div>
+                        <!-- Trạng thái -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailStatus">Trạng thái</label>
+                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailStatus"
+                                placeholder="Trạng thái" disabled />
+                        </div>
+                        <!-- Số tiền -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailMoney">Số tiền</label>
+                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailMoney"
+                                placeholder="Số tiền" disabled />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Huỷ
+                        </button>
+                        <button type="button" class="btn btn-primary">Xác nhận</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal History Transfer Detail -->
+        <div class="modal fade" id="modelHistoryTransferDetail" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Chi tiết giao dịch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column gap-2">
+                        <!-- Ngày giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailDate">Ngày giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailDate"
+                                placeholder="Ngày giao dịch" disabled />
+                        </div>
+                        <!-- Mã giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailCode">Mã giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailCode"
+                                placeholder="Mã giao dịch" disabled />
+                        </div>
+                        <!-- Trạng thái -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailStatus">Trạng thái</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailStatus"
+                                placeholder="Trạng thái" disabled />
+                        </div>
+                        <!-- Số tiền -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailMoney">Số tiền</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailMoney"
+                                placeholder="Số tiền" disabled />
+                        </div>
+                        <!-- Sđt  người nhận -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailPhone">SĐT người nhận</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailPhone"
+                                placeholder="SĐT người nhận" disabled />
+                        </div>
+                        <!-- Tên người nhận -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryTransferDetailReceiver">Tên gười nhận</label>
+                            <input type="text" class="form-control" id="inputHistoryTransferDetailReceiver"
+                                placeholder="Người nhận" disabled />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Huỷ
+                        </button>
+                        <button type="button" class="btn btn-primary">Xác nhận</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  Modal History Phone Card Detail -->
+        <div class="modal fade" id="modelHistoryPhoneCardDetail" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Chi tiết giao dịch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column gap-2">
+                        <!-- Ngày giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryPhoneCardDetailDate">Ngày giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailDate"
+                                placeholder="Ngày giao dịch" disabled />
+                        </div>
+                        <!-- Mã giao dịch -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryPhoneCardDetailCode">Mã giao dịch</label>
+                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCode"
+                                placeholder="Mã giao dịch" disabled />
+                        </div>
+                        <!-- Trạng thái -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryPhoneCardDetailStatus">Trạng thái</label>
+                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailStatus"
+                                placeholder="Trạng thái" disabled />
+                        </div>
+                        <!-- Số tiền -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryPhoneCardDetailMoney">Số tiền</label>
+                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailMoney"
+                                placeholder="Số tiền" disabled />
+                        </div>
+                        <!-- Mã thẻ -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryPhoneCardDetailCardCode">Mã thẻ</label>
+                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCardCode"
+                                placeholder="Mã thẻ" disabled />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Huỷ
+                        </button>
+                        <button type="button" class="btn btn-primary">Xác nhận</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer></footer>

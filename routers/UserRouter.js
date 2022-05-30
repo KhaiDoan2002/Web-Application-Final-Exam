@@ -11,6 +11,7 @@ const verifyOTPValidator = require('../validators/verifyOTPValidator')
 const resetPasswordByOTPValidator = require('../validators/resetPasswordByOTPValidator')
 const middleware = require('../middleware/index')
 
+
 // Register
 router.get('/register', UserController.getRegister)
 router.post('/register', middleware.multipleUpload, registerValidator, UserController.postRegister)
@@ -44,5 +45,23 @@ router.get('/resendOTP', middleware.roleVerifyOTP, UserController.getResendOTP)
 router.get('/resetPasswordByOTP', middleware.roleResetPasswordByOTP, UserController.getResetPassword)
 router.post('/resetPasswordByOTP', resetPasswordByOTPValidator, UserController.postResetPasswordByOTP)
 
+// Deposit money
+router.get('/deposit', checkLogin, UserController.getDepositPage)
+router.post('/deposit', middleware.getUser, UserController.postDepositPage);
+
+// Withdraw money
+router.get('/withdraw', checkLogin, UserController.getWithdrawPage)
+router.post('/withdraw', middleware.getUser, UserController.postWithdrawPage);
+
+// Transfer money
+router.get('/transfer', checkLogin, UserController.getTransferPage);
+router.post('/transfer', middleware.getUser, UserController.postTransferPage);
+router.get('/transfer/confirm', checkLogin, UserController.getTransferConfirm);
+router.post('/transfer/confirm', middleware.getUser, UserController.postTransferConfirm);
+
+// Mobile card
+router.get('/buycard', checkLogin, UserController.getMobileCardPage);
+router.post('/buycard', middleware.getUser, UserController.postMobileCardPage);
+router.get('/notification', UserController.getNotificationPage);
 
 module.exports = router

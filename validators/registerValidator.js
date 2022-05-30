@@ -12,7 +12,6 @@ module.exports = [
         .notEmpty().withMessage('Email không được bỏ trống')
         .isEmail().withMessage('Email không hợp lệ'),
 
-
     check('phone')
         .exists().withMessage('Vui lòng nhập số điện thoại')
         .notEmpty().withMessage('Không được để trống số điện thoại')
@@ -28,23 +27,30 @@ module.exports = [
         .notEmpty().withMessage('Không được để trống ngày tháng năm sinh')
         .isDate().withMessage('Ngày tháng năm sinh không hợp lệ'),
 
-        
-    check('email')
-        .custom(value => {
-            return User.findOne({ email: value }).then(user => {
-                if (user)
-                    throw new Error('Email đã tồn tại')
-                return true
-            })
-        }),
 
+    check('email')
+        .custom((value, { req }) => {
+            return User.findOne({ email: req.body.email })
+                .then(user => {
+                    if (user)
+                        throw new Error('Email đã tồn tại')
+                    else {
+                        return true
+                    }
+                })
+        }),
     check('phone')
-        .custom(value => {
-            return User.findOne({ phone: value }).then(user => {
-                if (user)
-                    throw new Error('Số điện thoại đã tồn tại')
-                return true
-            })
+        .custom((value, { req }) => {
+            return User.findOne({ phone: req.body.phone })
+                .then(user => {
+                    if (user)
+                        throw new Error('Số điện thoại đã tồn tại')
+                    else {
+                        return true
+                    }
+                })
         })
+
+
 
 ]

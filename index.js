@@ -10,7 +10,7 @@ const cookieParser = require('cookie-parser')
 const database = require('./config/db')
 // Import router
 const UserRouter = require('./routers/UserRouter')
-
+const AdminRouter = require('./routers/AdminRouter')
 // View engine
 app.set('view engine', 'hbs')
 app.engine('hbs', handlebars.engine({
@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 
 // User Router
 app.use('/user', UserRouter)
+app.use('/admin', AdminRouter)
 
 // Connect to Data base
 database.connect()

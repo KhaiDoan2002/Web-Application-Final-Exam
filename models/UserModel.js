@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-
 const UserSchema = new Schema({
     phone: {
         type: Number,
@@ -52,6 +51,36 @@ const UserSchema = new Schema({
     failAccess: {
         type: Number,
         default: 0
+    },
+    blockAt: {
+        type: Date
+    },
+    createAt: {
+        type: Date,
+        default: Date.now()
+    },
+    balance: {
+        type: Number,
+        default: 0
+    },
+    history: {
+        type: [
+            {
+                action: String,
+                amount: String,
+                fee: Number,
+                receive_code: String,
+                note: String,
+                Status: String,
+                CreateAt: {
+                    type: Date,
+                    default: Date.now()
+                }
+            },
+            {
+                timestamp: true
+            }
+        ]
     }
 })
 
