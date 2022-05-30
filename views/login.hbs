@@ -1,60 +1,59 @@
-<a href="https://front.codes/" class="logo" target="_blank">
-    <img src="https://assets.codepen.io/1462889/fcy.png" alt="">
-</a>
+<div class="dark-body">
+    <div class="section">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <div class="card-3d-wrap-login mx-auto">
+                            <div class="card-3d-wrapper">
+                                {{!-- Login --}}
+                                <form action="" method="post">
+                                    <div class="card-front">
+                                        <div class="center-wrap">
+                                            <div class="section text-center">
+                                                <h4 class="mb-4 pb-3">Đăng nhập</h4>
+                                                <div class="form-group">
+                                                    <input type="text" name="username" value="{{username}}"
+                                                        class="form-style" placeholder="Tên đăng nhập"
+                                                        autocomplete="off">
+                                                    <i class="input-icon uil uil-at"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="password" name="password" class="form-style"
+                                                        placeholder="Mật khẩu" autocomplete="off">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
 
-<div class="section">
-    <div class="container">
-        <div class="row full-height justify-content-center">
-            <div class="col-12 text-center align-self-center py-5">
-                <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                    <div class="card-3d-wrap-login mx-auto">
-                        <div class="card-3d-wrapper">
-                            {{!-- Login --}}
-                            <form action="" method="post">
-                                <div class="card-front">
-                                    <div class="center-wrap">
-                                        <div class="section text-center">
-                                            <h4 class="mb-4 pb-3">Đăng nhập</h4>
-                                            <div class="form-group">
-                                                <input type="text" name="username" value="{{username}}"
-                                                    class="form-style" placeholder="Tên đăng nhập" autocomplete="off">
-                                                <i class="input-icon uil uil-at"></i>
+
+                                                {{#if fail}}
+
+                                                <div id="failAccess" class="alert alert-danger mt-2"></div>
+                                                <button type="submit" disabled class="dark-btn mt-4">Đăng nhập</button>
+                                                {{else}}
+                                                {{#if success}}
+                                                <div class="alert alert-success mt-2 ">
+                                                    {{success}}
+                                                </div>
+                                                {{/if}}
+                                                {{#if error}}
+                                                <div class="alert alert-danger mt-2">
+                                                    {{error}}
+                                                </div>
+                                                {{/if}}
+                                                <button type="submit" class="dark-btn mt-4">Đăng nhập</button>
+                                                <p class="mb-0 mt-4 text-center"><a href="/user/restorePassword"
+                                                        class="link">Quên mật
+                                                        khẩu?</a></p>
+                                                <p class="mb-0 mt-4 text-center">Nếu bạn chưa có tài khoản? <a
+                                                        href="/user/register" class="link">Tạo tài
+                                                        khoản mới!</a></p>
+                                                {{/if}}
+
                                             </div>
-                                            <div class="form-group mt-2">
-                                                <input type="password" name="password" class="form-style"
-                                                    placeholder="Mật khẩu" autocomplete="off">
-                                                <i class="input-icon uil uil-lock-alt"></i>
-                                            </div>
-
-
-                                            {{#if fail}}
-
-                                            <div id="failAccess" class="alert alert-danger mt-2"></div>
-                                            <button type="submit" disabled class="btn mt-4">Đăng nhập</button>
-                                            {{else}}
-                                            {{#if success}}
-                                            <div class="alert alert-success mt-2 ">
-                                                {{success}}
-                                            </div>
-                                            {{/if}}
-                                            {{#if error}}
-                                            <div class="alert alert-danger mt-2">
-                                                {{error}}
-                                            </div>
-                                            {{/if}}
-                                            <button type="submit" class="btn mt-4">Đăng nhập</button>
-                                            <p class="mb-0 mt-4 text-center"><a href="/user/restorePassword"
-                                                    class="link">Quên mật
-                                                    khẩu?</a></p>
-                                            <p class="mb-0 mt-4 text-center">Nếu bạn chưa có tài khoản? <a
-                                                    href="/user/register" class="link">Tạo tài
-                                                    khoản mới!</a></p>
-                                            {{/if}}
-
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

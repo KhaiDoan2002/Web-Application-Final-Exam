@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
-body {
+.dark-body {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
     font-size: 15px;
@@ -269,7 +269,7 @@ h6 span {
     transition: all 200ms linear;
 }
 
-.btn {
+.dark-btn {
     border-radius: 4px;
     height: 44px;
     font-size: 13px;
