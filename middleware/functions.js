@@ -7,12 +7,12 @@ exports.stopWithdraw = (user) => {
     let isOver = false;
 
     user.history.forEach(h => {
-        
-        if(this.normalizeDate(h.createdAt) === curr && h.status === 'Rút tiền') {
+
+        if (this.normalizeDate(h.createdAt) === curr && h.status === 'Rút tiền') {
             count += 1;
         }
 
-        if(count == 2) {
+        if (count == 2) {
             isOver = true;
             return;
         }
@@ -22,20 +22,19 @@ exports.stopWithdraw = (user) => {
 }
 
 exports.normalizeDate = (date) => {
-    
     return date.toISOString().split('T')[0];
 }
 
 exports.checkErrorInput = (req, res, backup_path) => {
     let errors = validationResult(req);
-    if(!errors.isEmpty()) {
+    if (!errors.isEmpty()) {
         errors = errors.mapped();
         let message = '';
-        for(err in errors) {
+        for (err in errors) {
             message = errors[err].msg;
             break;
         }
-        
+
         req.flash('error', message);
         return res.redirect(backup_path);
     }

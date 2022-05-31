@@ -4,7 +4,7 @@ const AdminController = require('../controllers/AdminController')
 const checkAdmin = require('../auth/checkAdmin')
 const checkLogin = require('../auth/checkLogin')
 
-// GET ONE
+router.get('/', checkLogin, AdminController.getIndex)
 // Xem thông tin của user
 router.get('/user/:id', AdminController.getUserInfo)
 // GET ALL
@@ -30,8 +30,8 @@ router.get('/unlockUser/:id', AdminController.getUnlockUser)
 // router.get('/add', AdminController.getAddHistory)
 router.get('/getHistory', AdminController.getHistory)
 
-// Thay đổi trạng thái của giao dịch
-router.get('/update/:id', AdminController.getUpdateStatus)
+// Thay đổi trạng thái của giao dịch (Xác nhận giao dịch)
+router.get('/confirmation/:id', AdminController.getUpdateStatus)
 
 router.get('/add', AdminController.getAddHistory)
 module.exports = router

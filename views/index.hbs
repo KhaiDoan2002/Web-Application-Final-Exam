@@ -1,12 +1,21 @@
 <nav class="navbar navbar-expand navbar-light bg-faded">
     <div class="container">
         <a class="navbar-brand" href="#">Navbar</a>
-        <form class="d-flex my-2 my-lg-0">
-            <input class="form-control me-sm-2" type="text" placeholder="Search" />
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-                Search
+        <div class="dropdown open">
+            <button class="border-0 bg-transparent dropdown-toggle" type="button" id="triggerId"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="https://via.placeholder.com/30" alt="" class="rounded-2" />
             </button>
-        </form>
+            <div class="dropdown-menu" aria-labelledby="triggerId">
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modelUserInformation">
+                    Xem thông tin
+                </button>
+                <button class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modelUserChangePassword">
+                    Đổi mật khẩu
+                </button>
+                <a class="dropdown-item" href="/user/logout">Đăng xuất</a>
+            </div>
+        </div>
     </div>
 </nav>
 <main class="py-3">
@@ -23,7 +32,7 @@
                     <div class="d-flex justify-content-end">
                         <a href="/user/deposit">
                             <button class="border px-3 py-1 rounded-2 bg-transparent border-dark">
-                            Nạp tiền
+                                Nạp tiền
                             </button>
                         </a>
                     </div>
@@ -33,32 +42,28 @@
                             class="bi bi-wallet-fill me-2"></i> Dịch vụ</span>
                     <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
                         <li>
-                            <button
-                                id="btnDeposit"
+                            <button id="btnDeposit"
                                 class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-bank me-2"></i>
                                 <span> Nạp tiền </span>
                             </button>
                         </li>
                         <li>
-                            <button
-                                id="btnWithdraw"
+                            <button id="btnWithdraw"
                                 class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-cash me-2"></i>
                                 <span>Rút tiền </span>
                             </button>
                         </li>
                         <li>
-                            <button
-                                id="btnTransfer"
+                            <button id="btnTransfer"
                                 class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-arrow-down-up me-2"></i>
                                 <span>Chuyển tiên</span>
                             </button>
                         </li>
                         <li>
-                            <button
-                                id="btnBuyCard"
+                            <button id="btnBuyCard"
                                 class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-phone me-2"></i>
                                 <span>Mua thẻ điện thoại</span>
@@ -83,20 +88,20 @@
                         </thead>
                         <tbody>
                             {{#each data}}
-                                <tr data-bs-toggle="modal" data-bs-target="#modelHistoryTransferDetail">
-                                    <td>
-                                        <i class="{{icon}} me-2"></i>
-                                    </td>
-                                    <td>{{action}}</td>
-                                    <td>{{amount}}</td>
-                                    <td>{{createdAt}}</td>
-                                    <td class="text-{{style}}">
-                                        <span>{{status}}</span>
-                                    </td>
-                                </tr>
+                            <tr data-bs-toggle="modal" data-bs-target="#{{modal}}{{id}}">
+                                <td>
+                                    <i class="{{icon}} me-2"></i>
+                                </td>
+                                <td>{{action}}</td>
+                                <td>{{amount}}</td>
+                                <td>{{createdAt}}</td>
+                                <td class="text-{{style}}">
+                                    <span>{{status}}</span>
+                                </td>
+                            </tr>
                             {{/each}}
 
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -144,6 +149,138 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal User Change Password -->
+        <div class="modal fade" id="modelUserChangePassword" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Đổi mật khẩu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column gap-2">
+                        <div class="form-group d-flex flex-column gap-1">
+                            <!-- Mật khẩu cũ -->
+                            <label for="">Mật khẩu cũ</label>
+                            <input type="password" class="form-control" id="inputUserOldPassword"
+                                placeholder="Mật khẩu cũ" />
+                        </div>
+                        <!-- Mật khẩu mới -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="inputUserNewPassword"
+                                placeholder="Mật khẩu mới" />
+                        </div>
+                        <!-- Nhập lại mật khẩu mới -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Nhập lại mật khẩu mới</label>
+                            <input type="password" class="form-control" id="inputUserNewPasswordConfirm"
+                                placeholder="Nhập lại mật khẩu mới" />
+                        </div>
+                        <span class="text-danger d-none" id="alertUserChangePassword">
+                            Mật khẩu xác nhận không chính xác
+                        </span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Huỷ
+                        </button>
+                        <button type="button" class="btn btn-primary" id="btnUserChangePassword">
+                            Đổi mật khẩu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal User Information -->
+        <div class="modal fade" id="modelUserInformation" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thông tin cá nhân</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body d-flex flex-column gap-2">
+
+                        <div class="form-group d-flex flex-column gap-1">
+                            <!-- Họ và tên -->
+
+                            <label for="">Họ và tên</label>
+                            <input value="{{fullname}}" type="text" class="form-control" id="inputUserFullName"
+                                placeholder="Họ và tên" disabled />
+
+                        </div>
+                        <!-- Tên người dùng -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Tên người dùng</label>
+                            <input value="{{username}}" type="text" class="form-control" id="inputUserUsername"
+                                placeholder="Tên người dùng" disabled />
+                        </div>
+                        <!-- Số điện thoại -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Số điện thoại</label>
+                            <input value="{{phone}}" type="text" class="form-control" id="inputUserPhone"
+                                placeholder="Số điện thoại" disabled />
+                        </div>
+                        <!-- Email -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Email</label>
+                            <input value="{{email}}" type="text" class="form-control" id="inputUserEmail"
+                                placeholder="Email" disabled />
+                        </div>
+                        <!-- Ngày tháng năm sinh -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Ngày tháng năm sinh</label>
+                            <input value="{{birth}}" type="text" class="form-control" id="inputUserBirthday"
+                                placeholder="Ngày tháng năm sinh" disabled />
+                        </div>
+                        <!-- Địa chỉ -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Địa chỉ</label>
+                            <input value="{{address}}" type="text" class="form-control" id="inputUserAddress"
+                                placeholder="Địa chỉ" disabled />
+                        </div>
+
+                        <!-- Trạng thái xác minh -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Trạng thái xác minh</label>
+                            <input value="{{status}}" type="text" class="form-control" id="inputUserVerified"
+                                placeholder="Địa chỉ" disabled />
+                        </div>
+                        {{#if requestID}}
+                        <!-- CMND mặt trước -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">CMND mặt trước</label>
+                            <img src="" alt="" id="inputUserIdCardFront" />
+                            <!-- Upload image -->
+                            <input type="file" class="form-control" id="inputUserIdCardFrontUpload" />
+                        </div>
+                        <!-- CMND mặt sau -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">CMND mặt sau</label>
+                            <img src="" alt="" id="inputUserIdCardBack" />
+                            <!-- Upload image -->
+                            <input type="file" class="form-control" id="inputUserIdCardBackUpload" />
+                        </div>
+                        {{/if}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Đóng
+                        </button>
+                        {{#if requestID}}
+                        <button type="button" class="btn btn-primary" id="btnNextToDepositConfirm">
+                            Tiếp theo
+                        </button>
+                        {{/if}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -520,9 +657,10 @@
                 </div>
             </div>
         </div>
-
+        {{#each data }}
+        {{#if isDeposit}}
         <!-- Modal History Deposit Detail -->
-        <div class="modal fade" id="modelHistoryDepositDetail" tabindex="-1" role="dialog"
+        <div class="modal fade" id="modelHistoryDepositDetail{{id}}" tabindex="-1" role="dialog"
             aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -534,39 +672,42 @@
                         <!-- Ngày giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailDate">Ngày giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailDate"
-                                placeholder="Ngày giao dịch" disabled />
+                            <input value="{{createdAt}}" type="text" class="form-control"
+                                id="inputHistoryTransferDetailDate" placeholder="Ngày giao dịch" disabled />
                         </div>
                         <!-- Mã giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailCode">Mã giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailCode"
+                            <input value="{{id}}" type="text" class="form-control" id="inputHistoryTransferDetailCode"
                                 placeholder="Mã giao dịch" disabled />
                         </div>
                         <!-- Trạng thái -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailStatus">Trạng thái</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailStatus"
-                                placeholder="Trạng thái" disabled />
+                            <input value="{{status}}" type="text" class="form-control"
+                                id="inputHistoryTransferDetailStatus" placeholder="Trạng thái" disabled />
                         </div>
                         <!-- Số tiền -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailMoney">Số tiền</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailMoney"
-                                placeholder="Số tiền" disabled />
+                            <input value="{{amount}}" type="text" class="form-control"
+                                id="inputHistoryTransferDetailMoney" placeholder="Số tiền" disabled />
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Huỷ
+                            Đóng
                         </button>
-                        <button type="button" class="btn btn-primary">Xác nhận</button>
                     </div>
                 </div>
             </div>
         </div>
+        {{/if}}
+        {{/each}}
+        {{#each data }}
+        {{#if isWithdraw}}
         <!-- Modal History Withdraw Detail -->
-        <div class="modal fade" id="modelHistoryWithdrawDetail" tabindex="-1" role="dialog"
+        <div class="modal fade" id="modelHistoryWithdrawDetail{{id}}" tabindex="-1" role="dialog"
             aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -578,40 +719,44 @@
                         <!-- Ngày giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryWithdrawDetailDate">Ngày giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailDate"
-                                placeholder="Ngày giao dịch" disabled />
+                            <input value="{{createdAt}}" type="text" class="form-control"
+                                id="inputHistoryWithdrawDetailDate" placeholder="Ngày giao dịch" disabled />
                         </div>
                         <!-- Mã giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryWithdrawDetailCode">Mã giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailCode"
+                            <input value="{{id}}" type="text" class="form-control" id="inputHistoryWithdrawDetailCode"
                                 placeholder="Mã giao dịch" disabled />
                         </div>
                         <!-- Trạng thái -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryWithdrawDetailStatus">Trạng thái</label>
-                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailStatus"
-                                placeholder="Trạng thái" disabled />
+                            <input value="{{status}}" type="text" class="form-control"
+                                id="inputHistoryWithdrawDetailStatus" placeholder="Trạng thái" disabled />
                         </div>
                         <!-- Số tiền -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryWithdrawDetailMoney">Số tiền</label>
-                            <input type="text" class="form-control" id="inputHistoryWithdrawDetailMoney"
-                                placeholder="Số tiền" disabled />
+                            <input value="{{amount}}" type="text" class="form-control"
+                                id="inputHistoryWithdrawDetailMoney" placeholder="Số tiền" disabled />
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Huỷ
+                            Đóng
                         </button>
-                        <button type="button" class="btn btn-primary">Xác nhận</button>
+                        {{!-- <button type="button" class="btn btn-primary">Xác nhận</button> --}}
                     </div>
                 </div>
             </div>
         </div>
+        {{/if}}
+        {{/each}}
 
+        {{#each data }}
+        {{#if isTransfer}}
         <!-- Modal History Transfer Detail -->
-        <div class="modal fade" id="modelHistoryTransferDetail" tabindex="-1" role="dialog"
+        <div class="modal fade" id="modelHistoryTransferDetail{{id}}" tabindex="-1" role="dialog"
             aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -623,52 +768,55 @@
                         <!-- Ngày giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailDate">Ngày giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailDate"
-                                placeholder="Ngày giao dịch" disabled />
+                            <input value="{{createdAt}}" type="text" class="form-control"
+                                id="inputHistoryTransferDetailDate" placeholder="Ngày giao dịch" disabled />
                         </div>
                         <!-- Mã giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailCode">Mã giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailCode"
+                            <input value="{{id}}" type="text" class="form-control" id="inputHistoryTransferDetailCode"
                                 placeholder="Mã giao dịch" disabled />
                         </div>
                         <!-- Trạng thái -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailStatus">Trạng thái</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailStatus"
-                                placeholder="Trạng thái" disabled />
+                            <input value="{{status}}" type="text" class="form-control"
+                                id="inputHistoryTransferDetailStatus" placeholder="Trạng thái" disabled />
                         </div>
                         <!-- Số tiền -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailMoney">Số tiền</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailMoney"
-                                placeholder="Số tiền" disabled />
+                            <input value="{{amount}}" type="text" class="form-control"
+                                id="inputHistoryTransferDetailMoney" placeholder="Số tiền" disabled />
                         </div>
                         <!-- Sđt  người nhận -->
-                        <div class="form-group d-flex flex-column gap-1">
+                        {{!-- <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailPhone">SĐT người nhận</label>
                             <input type="text" class="form-control" id="inputHistoryTransferDetailPhone"
                                 placeholder="SĐT người nhận" disabled />
-                        </div>
+                        </div> --}}
                         <!-- Tên người nhận -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryTransferDetailReceiver">Tên gười nhận</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailReceiver"
-                                placeholder="Người nhận" disabled />
+                            <input value="{{receiver}}" type="text" class="form-control"
+                                id="inputHistoryTransferDetailReceiver" placeholder="Người nhận" disabled />
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Huỷ
+                            Đóng
                         </button>
-                        <button type="button" class="btn btn-primary">Xác nhận</button>
+                        {{!-- <button type="button" class="btn btn-primary">Xác nhận</button> --}}
                     </div>
                 </div>
             </div>
         </div>
-
+        {{/if}}
+        {{/each}}
+        {{#each data }}
+        {{#if isPhoneCard}}
         <!--  Modal History Phone Card Detail -->
-        <div class="modal fade" id="modelHistoryPhoneCardDetail" tabindex="-1" role="dialog"
+        <div class="modal fade" id="modelHistoryPhoneCardDetail{{id}}" tabindex="-1" role="dialog"
             aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -680,43 +828,44 @@
                         <!-- Ngày giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryPhoneCardDetailDate">Ngày giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailDate"
-                                placeholder="Ngày giao dịch" disabled />
+                            <input value="{{createdAt}}" type="text" class="form-control"
+                                id="inputHistoryPhoneCardDetailDate" placeholder="Ngày giao dịch" disabled />
                         </div>
                         <!-- Mã giao dịch -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryPhoneCardDetailCode">Mã giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCode"
+                            <input value="{{id}}" type="text" class="form-control" id="inputHistoryPhoneCardDetailCode"
                                 placeholder="Mã giao dịch" disabled />
                         </div>
                         <!-- Trạng thái -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryPhoneCardDetailStatus">Trạng thái</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailStatus"
-                                placeholder="Trạng thái" disabled />
+                            <input value="{{status}}" type="text" class="form-control"
+                                id="inputHistoryPhoneCardDetailStatus" placeholder="Trạng thái" disabled />
                         </div>
                         <!-- Số tiền -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryPhoneCardDetailMoney">Số tiền</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailMoney"
-                                placeholder="Số tiền" disabled />
+                            <input value="{{amount}}" type="text" class="form-control"
+                                id="inputHistoryPhoneCardDetailMoney" placeholder="Số tiền" disabled />
                         </div>
                         <!-- Mã thẻ -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryPhoneCardDetailCardCode">Mã thẻ</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCardCode"
-                                placeholder="Mã thẻ" disabled />
+                            <input value="{{receive_code}}" type="text" class="form-control"
+                                id="inputHistoryPhoneCardDetailCardCode" placeholder="Mã thẻ" disabled />
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Huỷ
+                            Đóng
                         </button>
-                        <button type="button" class="btn btn-primary">Xác nhận</button>
                     </div>
                 </div>
             </div>
         </div>
+        {{/if}}
+        {{/each}}
     </div>
 </main>
 <footer></footer>

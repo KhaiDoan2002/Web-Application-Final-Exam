@@ -1,7 +1,74 @@
 const User = require('../models/UserModel')
-
+const { normalizeDate } = require('../middleware/functions')
 const AdminController = {
     // GET ONE
+    getIndex: async function (req, res) {
+        try {
+            // Danh sách giao dịch trên 5tr
+            const listUser = await User.find()
+            let admin
+            const listUserNotAdmin = []
+            listUser.forEach(user => {
+                if (user.username != 'admin')
+                    listUserNotAdmin.push(user)
+                else
+                    admin = user
+            })
+            const list = listUserNotAdmin.map(item => {
+                return (item.history).filter(h => {
+                    return h._doc.amount >= 5000000 && h._doc.status === 'Đang chờ duyệt'
+                })
+            })
+            const context = list[0].map(h => {
+                let icon = '';
+                if (h.action == 'Rút tiền') {
+                    icon = 'bi bi-cash';
+                }
+                else if (h.action == 'Chuyển tiền') {
+                    icon = 'bi bi-arrow-down-up';
+                }
+                else if (h.action.includes('Mua thẻ')) {
+                    icon = 'bi bi-phone';
+                }
+                else {
+                    icon = 'bi bi-bank';
+                }
+
+                let style = '';
+                if (h.status == 'Hoàn thành') {
+                    style = 'success';
+                }
+                else if (h.status == 'Đang chờ duyệt') {
+                    style = 'warning';
+                }
+                else {
+                    style = 'danger';
+                }
+                return {
+                    id: h._id,
+                    action: h.action,
+                    amount: h.amount,
+                    fee: h.fee,
+                    createdAt: normalizeDate(h.createdAt),
+                    status: h.status,
+                    icon: icon,
+                    style: style
+                };
+            })
+            // res.json({ date: context })
+            res.render('admin', {
+                data: context,
+                fullname: admin.fullname,
+                username: admin.username,
+                phone: admin.phone,
+                email: admin.email
+            })
+        } catch (error) {
+            console.log(error)
+            res.redirect('/user/logout')
+        }
+
+    },
     getUserInfo: async function (req, res) {
         try {
             const id = req.params.id
@@ -120,23 +187,19 @@ const AdminController = {
     getUpdateStatus: async function (req, res) {
         try {
             const id = req.params.id
-            const user = await User.findById(id)
-            const history = user.history[0]
-
-            const result = await User.updateOne({ _id: id }, {
-                $set: {
-                    history: [{
-                        action: history.action,
-                        Status: 'Hoàn thành',
-                        amount: history.amount,
-                        fee: history.fee,
-                        receive_code: history.receive_code,
-                        note: history.note,
-                        CreateAt: history.CreateAt
-                    }]
-                }
+            const listUser = await User.find()
+            const user = listUser.find(item => {
+                return item.history.find(h => {
+                    return h._id == id
+                })
             })
-            res.json({ code: 1, result: result })
+            const history = (user.history).find(h => {
+                return h._id == id
+            })
+            user.balance -= (history.amount + history.fee)
+            history.status = 'Hoàn thành'
+            user.save()
+            res.redirect('/admin/')
         } catch (error) {
             console.log(error)
         }

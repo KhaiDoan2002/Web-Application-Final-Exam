@@ -6,8 +6,8 @@ module.exports = [
         .exists().withMessage('Vui lòng nhập địa chỉ email')
         .notEmpty().withMessage('Không được bỏ trống địa chỉ email')
         .isEmail().withMessage('Email không hợp lệ')
-        .custom((value) => {
-            const email = value
+        .custom((value, { req }) => {
+            const email = req.body.email
             return User.findOne({ email: email })
                 .then(account => {
                     if (!account)
@@ -22,7 +22,7 @@ module.exports = [
         .notEmpty().withMessage('Vui lòng xác nhận số điện thoại')
         .isLength({ min: 6 }).withMessage('số điện thoại không hợp lệ')
         .custom((value, { req }) => {
-            const phone = value
+            const phone = req.body.phone
             return User.findOne({ phone: phone })
                 .then(account => {
                     if (!account)

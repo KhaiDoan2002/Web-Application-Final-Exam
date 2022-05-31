@@ -10,48 +10,46 @@
                     <!-- Ngày giao dịch -->
                     <div class="form-group d-flex flex-column gap-1">
                         <label for="inputHistoryPhoneCardDetailDate">Ngày giao dịch</label>
-                        <input value="{{createdAt}}" type="text" class="form-control"
-                            id="inputHistoryPhoneCardDetailDate" placeholder="Ngày giao dịch" disabled />
+                        <input type="text" class="form-control" id="inputHistoryPhoneCardDetailDate"
+                            placeholder="Ngày giao dịch" disabled />
                     </div>
-
+                    <!-- Mã giao dịch -->
+                    <div class="form-group d-flex flex-column gap-1">
+                        <label for="inputHistoryPhoneCardDetailCode">Mã giao dịch</label>
+                        <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCode"
+                            placeholder="Mã giao dịch" disabled />
+                    </div>
+                    <!-- Trạng thái -->
+                    <div class="form-group d-flex flex-column gap-1">
+                        <label for="inputHistoryPhoneCardDetailStatus">Trạng thái</label>
+                        <input type="text" class="form-control" id="inputHistoryPhoneCardDetailStatus"
+                            placeholder="Trạng thái" disabled />
+                    </div>
                     <!-- Loại thẻ -->
                     <div class="form-group d-flex flex-column gap-1">
                         <label for="inputHistoryPhoneCardDetailType">Loại thẻ</label>
-                        <input value="{{provider_name}}" type="text" class="form-control"
-                            id="inputHistoryPhoneCardDetailType" placeholder="Loại thẻ" disabled />
+                        <input type="text" class="form-control" id="inputHistoryPhoneCardDetailType"
+                            placeholder="Loại thẻ" disabled />
                     </div>
                     <!-- Mệnh giá -->
                     <div class="form-group d-flex flex-column gap-1">
                         <label for="inputHistoryPhoneCardDetailPrice">Mệnh giá</label>
-                        <input value="{{card_value}}" type="text" class="form-control"
-                            id="inputHistoryPhoneCardDetailPrice" placeholder="Mệnh giá" disabled />
-                    </div>
-                    <!-- Số lượng -->
-                    <div class="form-group d-flex flex-column gap-1">
-                        <label for="inputHistoryPhoneCardDetailQuantity">Số lượng</label>
-                        <input value="{{quantity}}" type="text" class="form-control"
-                            id="inputHistoryPhoneCardDetailQuantity" placeholder="Số lượng" disabled />
+                        <input type="text" class="form-control" id="inputHistoryPhoneCardDetailPrice"
+                            placeholder="Mệnh giá" disabled />
                     </div>
                     <!-- Số tiền -->
                     <div class="form-group d-flex flex-column gap-1">
                         <label for="inputHistoryPhoneCardDetailMoney">Tổng số tiền</label>
-                        <input value="{{total}}" type="text" class="form-control"
-                            id="inputHistoryPhoneCardDetailTotalPrice" placeholder="Số tiền" disabled />
+                        <input type="text" class="form-control" id="inputHistoryPhoneCardDetailTotalPrice"
+                            placeholder="Số tiền" disabled />
                     </div>
                     <!-- Mã thẻ -->
                     <div class="form-group d-flex flex-column gap-1">
                         <label for="inputHistoryPhoneCardDetailCardCode">Mã thẻ</label>
-                        {{#each listCard}}
-                        <input value="{{this}}" type="text" class="form-control"
-                            id="inputHistoryPhoneCardDetailCardCode" placeholder="Mã thẻ" disabled />
-                        {{/each}}
+                        <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCardCode"
+                            placeholder="Mã thẻ" disabled />
                     </div>
-
-                    <a href="/user/" class="btn btn-secondary">
-                        Thoát
-                    </a>
                 </div>
-
             </div>
         </div>
     </div>

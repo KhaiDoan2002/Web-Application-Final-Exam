@@ -37,11 +37,11 @@ function sendEmailVerify(req, res, email) {
         else {
             req.session.codeToken = codeToken
             const transporter = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
+                host: process.env.TRANSPORTER_HOST,
+                port: process.env.TRANSPORTER_PORT,
                 auth: {
-                    user: 'cole.ryan34@ethereal.email',
-                    pass: 'WrFuT2SyNK7KzjFwvV'
+                    user: process.env.TRANSPORTER_USER,
+                    pass: process.env.TRANSPORTER_PASS
                 }
             });
 
@@ -79,48 +79,93 @@ function sendEmailVerify(req, res, email) {
 }
 
 const UserController = {
+
     getIndex: function (req, res) {
         const user = req.getUser;
         const balance = user.balance;
-        const context = (user.history).map(h => {
-            let icon = '';
-            
-            if(h._doc.action == 'Rút tiền') {
-                icon = 'bi bi-cash';
-            }
-            else if(h._doc.action == 'Chuyển tiền') {
-                icon = 'bi bi-arrow-down-up';
-            }
-            else if(h._doc.action.includes('Mua thẻ')) {
-                icon = 'bi bi-phone';
-            }
-            else {
-                icon = 'bi bi-bank';
-            }
+        let context = ''
+        if (user.history) {
+            context = (user.history).map(h => {
+                let icon = ''
+                let modal = ''
+                let isWithdraw = false
+                let isTransfer = false
+                let isDeposit = false
+                let isPhoneCard = false
 
-            let style = '';
-            if(h._doc.status == 'Hoàn thành') {
-                style = 'success';
-            }
-            else if(h._doc.status == 'Đang chờ duyệt') {
-                style = 'warning';
-            }
-            else {
-                style = 'danger';
-            }
 
-            return {
-                action: h._doc.action,
-                amount: h._doc.amount,
-                createdAt: normalizeDate(h._doc.createdAt),
-                status: h._doc.status,
-                icon: icon,
-                style: style
-            };
-        });
-        
-        
-        res.render('index', {balance, data: context})
+                if (h._doc.action == 'Rút tiền') {
+                    icon = 'bi bi-cash';
+                    modal = 'modelHistoryWithdrawDetail'
+                    isWithdraw = true
+                }
+                else if (h._doc.action == 'Chuyển tiền') {
+                    icon = 'bi bi-arrow-down-up';
+                    modal = 'modelHistoryTransferDetail'
+                    isTransfer = true
+                }
+                else if (h._doc.action.includes('Mua thẻ')) {
+                    icon = 'bi bi-phone';
+                    modal = 'modelHistoryPhoneCardDetail'
+                    isPhoneCard = true
+                }
+                else {
+                    icon = 'bi bi-bank';
+                    modal = 'modelHistoryDepositDetail'
+                    isDeposit = true
+                }
+
+                let style = '';
+                if (h._doc.status == 'Hoàn thành') {
+                    style = 'success';
+                }
+                else if (h._doc.status == 'Đang chờ duyệt') {
+                    style = 'warning';
+                }
+                else {
+                    style = 'danger';
+                }
+
+                let receive_code = h._doc.receive_code[0]
+
+                return {
+                    id: h._doc._id,
+                    action: h._doc.action,
+                    amount: h._doc.amount,
+                    createdAt: normalizeDate(h._doc.createdAt),
+                    status: h._doc.status,
+                    icon: icon,
+                    style: style,
+                    modal: modal,
+                    receiver: h._doc.receiver,
+                    isDeposit: isDeposit,
+                    isPhoneCard: isPhoneCard,
+                    isTransfer: isTransfer,
+                    isWithdraw: isWithdraw,
+                    receive_code: receive_code
+                };
+            });
+        }
+        let status = 'Đã xác minh'
+        let requestID = false
+        if (user.status == 'Not_verified')
+            status = 'Chưa được xác minh'
+        else if (user.status == 'Wait_for_update') {
+            requestID = true
+            status = 'Yêu cầu cung cấp lại ảnh CMND'
+        }
+        res.render('index', {
+            balance,
+            data: context,
+            fullname: user.fullname,
+            username: user.username,
+            phone: user.phone,
+            email: user.email,
+            birth: normalizeDate(user.birth),
+            address: user.address,
+            status: status,
+            requestID: requestID,
+        })
     },
     getRegister: function (req, res) {
         const error = req.flash('error') || ""
@@ -162,8 +207,8 @@ const UserController = {
                     host: 'smtp.ethereal.email',
                     port: 587,
                     auth: {
-                        user: 'pansy.mann78@ethereal.email',
-                        pass: '2Xfx1qFbAfAcyRurJz'
+                        user: 'jaeden.okuneva90@ethereal.email',
+                        pass: '3q2TM6yZQddda8s5Q3'
                     }
                 });
 
@@ -285,7 +330,7 @@ const UserController = {
                             jwt.sign({
                                 username: account.username,
                             }, JWT_SECRET, {
-                                expiresIn: '30m'
+                                expiresIn: '5m'
                             }, (err, token) => {
                                 if (err) {
                                     req.flash('error', 'Đăng nhập thất bại: ' + err)
@@ -293,9 +338,14 @@ const UserController = {
                                 } else {
                                     req.session.username = username
                                     req.session.token = token
-                                    BlockUser.findOneAndDelete({ username: username })
-                                    req.flash('success', 'Đăng nhập thành công')
-                                    res.redirect('/user/')
+                                    if (username != 'admin') {
+                                        BlockUser.findOneAndDelete({ username: username })
+                                        req.flash('success', 'Đăng nhập thành công')
+                                        res.redirect('/user/')
+                                    } else {
+                                        req.flash('success', 'Đăng nhập thành công')
+                                        res.redirect('/admin/')
+                                    }
 
                                 }
                             })
@@ -568,7 +618,7 @@ const UserController = {
                 }
 
                 const cardExpired = normalizeDate(card.expired);
-                
+
                 if (cardExpired != expired) {
                     req.flash('error', 'Sai ngày hết hạn');
                     return res.redirect('/user/withdraw');
@@ -620,8 +670,9 @@ const UserController = {
     postTransferPage: function (req, res, next) {
         checkErrorInput(req, res, '/user/transfer');
 
-        const { phone, email, amount, note, isFeePayer } = req.body;
-
+        const { phone, amount, note, isFeePayer } = req.body;
+        const user = req.getUser
+        const email = user.email
         User.findOne({ phone })
             .then(receiver => {
                 if (!receiver) {
@@ -647,18 +698,19 @@ const UserController = {
                     status: (amountInt > 5000000) ? 'Đang chờ duyệt' : 'Hoàn thành',
                 }
 
+
                 const OTPCode = `${Math.floor(100000 + Math.random() * 900000)}`
                 const transporter = nodemailer.createTransport({
-                    host: process.env.TRANSPORTER_HOST,
-                    port: process.env.TRANSPORTER_PORT,
+                    host: 'smtp.ethereal.email',
+                    port: 587,
                     auth: {
-                        user: process.env.TRANSPORTER_USER,
-                        pass: process.env.TRANSPORTER_PASS
+                        user: 'jaeden.okuneva90@ethereal.email',
+                        pass: '3q2TM6yZQddda8s5Q3'
                     }
                 });
                 const msg = {
                     from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
-                    to: `${email}`,
+                    to: `${receiver.email}`,
                     subject: "Mã OTP xác nhận chuyển tiền ✔",
                     text: "Vui lòng không tiết lộ mã này với bất kì ai",
                     html: `
@@ -678,8 +730,9 @@ const UserController = {
                             } else {
                                 console.log('Sending OTP successfully')
                                 req.flash('name', receiver.fullname);
+                                req.flash('date', normalizeDate(new Date()))
+                                req.flash('status', amountInt >= 5000000 ? 'Chờ xác nhận' : 'Hoàn thành')
                                 req.flash('amount', amountInt);
-                                req.flash('fee', trade.fee);
                                 req.flash('note', trade.note);
                                 req.session.phone = phone;
                                 req.session.email = email;
@@ -695,9 +748,10 @@ const UserController = {
     getTransferConfirm: function (req, res, next) {
         const receiver = req.flash('name') || '';
         const amount = req.flash('amount') || 0;
-        const fee = req.flash('fee') || 0;
         const note = req.flash('note') || '';
-        return res.render('confirm', { receiver, amount, fee, note });
+        const date = req.flash('date')
+        const status = req.flash('status')
+        return res.render('confirm', { receiver, amount, note, status, date });
     },
 
     postTransferConfirm: function (req, res, next) {
@@ -769,7 +823,13 @@ const UserController = {
                 req.getUser.balance -= (total + trade.fee);
                 req.getUser.save();
 
+                req.flash('createdAt', normalizeDate(new Date()))
                 req.flash('success', 'Mua thẻ thành công');
+                req.flash('listCard', listCard)
+                req.flash('total', total)
+                req.flash('quantity', quantity)
+                req.flash('provider_name', provider_name)
+                req.flash('card_value', card_value)
                 return res.redirect('/user/notification');
             })
             .catch(next);
@@ -777,8 +837,17 @@ const UserController = {
 
     getNotificationPage: function (req, res, next) {
         const success = req.flash('success') || '';
+        const listCard = req.flash('listCard') || '';
+        const total = req.flash('total') || '';
+        const quantity = req.flash('quantity') || '';
+        const card_value = req.flash('card_value') || '';
+        const provider_name = req.flash('provider_name') || '';
+        const createdAt = req.flash('createdAt')
+        return res.render('notification', { success, createdAt, listCard, total, quantity, card_value, provider_name })
+    },
 
-        return res.render('notification', { success })
+    postChangePassword: function (req, res) {
+
     }
 }
 

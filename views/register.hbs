@@ -1,65 +1,64 @@
-<a href="https://front.codes/" class="logo" target="_blank">
-    <img src="https://assets.codepen.io/1462889/fcy.png" alt="">
-</a>
-
-<div class="section">
-    <div class="container">
-        <div class="row full-height justify-content-center">
-            <div class="col-12 text-center align-self-center py-5">
-                <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                    <div class="card-3d-wrap-register mx-auto">
-                        <div class="card-3d-wrapper">
-                            <div class="card-front">
-                                <div class="center-wrap">
-                                    <form action="/user/register" method="post" enctype="multipart/form-data">
-                                        <div class="section text-center">
-                                            <h4 class="mb-2 pb-3 pt-3">Đăng ký</h4>
-                                            <div class="form-group">
-                                                <input type="text" name="fullname" value="{{fullname}}" class="form-style"
-                                                    placeholder="Họ và tên">
-                                                <i class="input-icon uil uil-user"></i>
+<div class="dark-body">
+    <div class="section">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <div class="card-3d-wrap-register mx-auto">
+                            <div class="card-3d-wrapper">
+                                <div class="card-front">
+                                    <div class="center-wrap">
+                                        <form action="/user/register" method="post" enctype="multipart/form-data">
+                                            <div class="section text-center">
+                                                <h4 class="mb-2 pb-3 pt-3">Đăng ký</h4>
+                                                <div class="form-group">
+                                                    <input type="text" name="fullname" value="{{fullname}}"
+                                                        class="form-style" placeholder="Họ và tên">
+                                                    <i class="input-icon uil uil-user"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="email" name="email" value="{{email}}"
+                                                        class="form-style" placeholder="Địa chỉ email">
+                                                    <i class="input-icon uil uil-at"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="text" name="phone" value="{{phone}}" class="form-style"
+                                                        placeholder="Số điện thoại">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="text" name="address" value="{{address}}"
+                                                        class="form-style" placeholder="Địa chỉ">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <label for="birth">Ngày tháng năm sinh</label>
+                                                    <input type="date" name="birth" value="{{birth}}" class="form-style"
+                                                        placeholder="Your Password" id="birth">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <label for="front-idCard">Ảnh mặt trước CMND</label>
+                                                    <input type="file" accept='image/*' name="frontID"
+                                                        class="form-style" placeholder="Your Password"
+                                                        id="front-idCard">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <label for="back-idCard">Ảnh mặt trước CMND</label>
+                                                    <input type="file" accept='image/*' name="backID" class="form-style"
+                                                        placeholder="Your Password" id="back-idCard">
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                {{#if error}}
+                                                <div class="alert alert-danger mt-2 mb-0">
+                                                    {{error}}
+                                                </div>
+                                                {{/if}}
+                                                <button type="submit" class="dark-btn mt-3">Đăng ký</button>
                                             </div>
-                                            <div class="form-group mt-2">
-                                                <input type="email" name="email" value="{{email}}" class="form-style"
-                                                    placeholder="Địa chỉ email">
-                                                <i class="input-icon uil uil-at"></i>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <input type="text" name="phone" value="{{phone}}" class="form-style"
-                                                    placeholder="Số điện thoại">
-                                                <i class="input-icon uil uil-lock-alt"></i>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <input type="text" name="address" value="{{address}}" class="form-style"
-                                                    placeholder="Địa chỉ">
-                                                <i class="input-icon uil uil-lock-alt"></i>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <label for="birth">Ngày tháng năm sinh</label>
-                                                <input type="date" name="birth" value="{{birth}}" class="form-style"
-                                                    placeholder="Your Password" id="birth">
-                                                <i class="input-icon uil uil-lock-alt"></i>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <label for="front-idCard">Ảnh mặt trước CMND</label>
-                                                <input type="file" accept='image/*' name="frontID" class="form-style"
-                                                    placeholder="Your Password" id="front-idCard">
-                                                <i class="input-icon uil uil-lock-alt"></i>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <label for="back-idCard">Ảnh mặt trước CMND</label>
-                                                <input type="file" name="backID" class="form-style"
-                                                    placeholder="Your Password" id="back-idCard">
-                                                <i class="input-icon uil uil-lock-alt"></i>
-                                            </div>
-                                            {{#if error}}
-                                            <div class="alert alert-danger mt-2 mb-0">
-                                                {{error}}
-                                            </div>
-                                            {{/if}}
-                                            <button type="submit" class="btn mt-3">Đăng ký</button>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

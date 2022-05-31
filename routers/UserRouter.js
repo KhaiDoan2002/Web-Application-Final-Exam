@@ -35,11 +35,11 @@ router.get('/restorePassword', UserController.getRestorePassword)
 router.post('/restorePassword', restorePasswordValidator, UserController.postRestorePassword)
 
 // Verify OTP
-router.get('/verifyOTP', middleware.roleVerifyOTP, UserController.getVerifyOTP)
+router.get('/verifyOTP', UserController.getVerifyOTP)
 router.post('/verifyOTP', verifyOTPValidator, UserController.postVerifyOTP)
 
 // Resend OTP
-router.get('/resendOTP', middleware.roleVerifyOTP, UserController.getResendOTP)
+router.get('/resendOTP', UserController.getResendOTP)
 
 // Reset Password By OTP 
 router.get('/resetPasswordByOTP', middleware.roleResetPasswordByOTP, UserController.getResetPassword)
