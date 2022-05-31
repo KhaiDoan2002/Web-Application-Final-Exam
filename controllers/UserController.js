@@ -292,6 +292,12 @@ const UserController = {
                 })
                 .then(match => {
                     if (!match) {
+
+                        if (username === 'admin') {
+                            req.flash('error', 'Mật khẩu không đúng')
+                            return res.redirect('/user/logout')
+                        }
+
                         account.failAccess = (account.failAccess + 1)
                         if (account.failAccess == 3) {
                             account.status = 'Locked'
@@ -319,7 +325,7 @@ const UserController = {
                             jwt.sign({
                                 username: account.username,
                             }, JWT_SECRET, {
-                                expiresIn: '5m'
+                                expiresIn: '15m'
                             }, (err, token) => {
                                 if (err) {
                                     req.flash('error', 'Đăng nhập thất bại: ' + err)
@@ -699,7 +705,7 @@ const UserController = {
                 });
                 const msg = {
                     from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
-                    to: `${receiver.email}`,
+                    to: `${email}`,
                     subject: "Mã OTP xác nhận chuyển tiền ✔",
                     text: "Vui lòng không tiết lộ mã này với bất kì ai",
                     html: `
