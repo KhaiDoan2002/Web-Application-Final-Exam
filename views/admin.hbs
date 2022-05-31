@@ -10,9 +10,7 @@
                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modelUserInformation">
                     Xem thông tin
                 </button>
-                <button class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modelUserChangePassword">
-                    Đổi mật khẩu
-                </button>
+                
                 <a class="dropdown-item" href="/user/logout">Đăng xuất</a>
             </div>
         </div>
@@ -29,19 +27,52 @@
                         <li>
                             <button
                                 class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
-                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
-                                <i class="bi bi-bank me-2"></i>
-                                <span>Quản lí tài khoản</span>
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
                                 data-bs-toggle="modal" data-bs-target="#modelWithdraw">
                                 <i class="bi bi-cash me-2"></i>
                                 <span>Quản lý giao dịch</span>
                             </button>
                         </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-stopwatch me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userNotActivated">Tài
+                                        khoản chờ kích
+                                        hoạt</a></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-check-circle me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userActivated">Tài
+                                        khoản đã kích
+                                        hoạt</a></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-bell-slash-fill me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userDisable">Tài khoản
+                                        đã bị vô hiệu
+                                        hóa</a></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-lock-fill me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userLocked">Tài khoản
+                                        bị khóa vô thời
+                                        hạn</a></span>
+                            </button>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -49,44 +80,7 @@
                 <div class="rounded-4 p-4 border">
                     <span class="border-bottom border-dark border-4 pb-1 d-inline-block mb-3 fw-bold"><i
                             class="bi bi-wallet-fill me-2"></i>Lịch sử giao dịch</span>
-                    <!-- Danh sách tài khoản đang chờ kích hoạt, Danh sách tài khoản đã kích hoạt, Danh sách tài khoản đã bị vô hiệu hóa, Danh sách tài khoản đang bị khóa vô thời hạn -->
-                    <select class="form-control">
-                        <option>Danh sách tài khoản đang chờ kích hoạt</option>
-                        <option>Danh sách tài khoản đã kích hoạt</option>
-                        <option>Danh sách tài khoản đã bị vô hiệu hóa</option>
-                        <option>Danh sách tài khoản đang bị khóa vô thời hạn</option>
-                    </select>
-                    <!-- Danh sách tài khoản -->
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Tên</th>
-                                <th scope="col">Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>user1</td>
-                                <td>Nguyễn Văn A</td>
-                                <td>nguyenvana@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>user2</td>
-                                <td>Nguyễn Văn B</td>
-                                <td>nguyenvanb@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>user3</td>
-                                <td>Nguyễn Văn C</td>
-                                <td>nguyênvanc@gmail.com</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -157,49 +151,11 @@
                             <input value="{{email}}" type="text" class="form-control" id="inputUserEmail"
                                 placeholder="Email" disabled />
                         </div>
-                        <!-- Ngày tháng năm sinh -->
-                        {{!-- <div class="form-group d-flex flex-column gap-1">
-                            <label for="">Ngày tháng năm sinh</label>
-                            <input type="date" class="form-control" id="inputUserBirthday"
-                                placeholder="Ngày tháng năm sinh" disabled />
-                        </div> --}}
-                        <!-- Địa chỉ -->
-                        {{!-- <div class="form-group d-flex flex-column gap-1">
-                            <label for="">Địa chỉ</label>
-                            <input type="text" class="form-control" id="inputUserAddress" placeholder="Địa chỉ"
-                                disabled />
-                        </div> --}}
-
-                        <!-- Trạng thái xác minh -->
-                        {{!-- <div class="form-group d-flex flex-column gap-1">
-                            <label for="">Trạng thái xác minh</label>
-                            <select class="form-control" id="inputUserVerified" disabled>
-                                <option value="0">Chưa xác minh</option>
-                                <option value="1">Đã xác minh</option>
-                            </select>
-                        </div> --}}
-                        <!-- CMND mặt trước -->
-                        {{!-- <div class="form-group d-flex flex-column gap-1">
-                            <label for="">CMND mặt trước</label>
-                            <img src="" alt="" id="inputUserIdCardFront" />
-                            <!-- Upload image -->
-                            <input type="file" class="form-control" id="inputUserIdCardFrontUpload" />
-                        </div> --}}
-                        <!-- CMND mặt sau -->
-                        {{!-- <div class="form-group d-flex flex-column gap-1">
-                            <label for="">CMND mặt sau</label>
-                            <img src="" alt="" id="inputUserIdCardBack" />
-                            <!-- Upload image -->
-                            <input type="file" class="form-control" id="inputUserIdCardBackUpload" />
-                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Đóng
                         </button>
-                        {{!-- <button type="button" class="btn btn-primary" id="btnNextToDepositConfirm">
-                            Tiếp theo
-                        </button> --}}
                     </div>
                 </div>
             </div>
@@ -250,7 +206,7 @@
         </div>
 
         <!-- Modal Deposit -->
-        <div class="modal fade" id="modelDeposit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        {{!-- <div class="modal fade" id="modelDeposit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -290,10 +246,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Modal Deposit Confirm -->
-        <div class="modal fade" id="modelDepositConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        {{!-- <div class="modal fade" id="modelDepositConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -331,10 +287,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Modal Withdraw -->
-        <div class="modal fade" id="modelWithdraw" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        {{!-- <div class="modal fade" id="modelWithdraw" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -395,9 +351,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <!-- Modal Withdraw Confirm -->
+        {{!-- <!-- Modal Withdraw Confirm -->
         <div class="modal fade" id="modelWithdrawConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -450,10 +406,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Modal Transfer -->
-        <div class="modal fade" id="modelTransfer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        {{!-- <div class="modal fade" id="modelTransfer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -510,10 +466,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Modal Transfer Confirm -->
-        <div class="modal fade" id="modelTransferConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        {{!-- <div class="modal fade" id="modelTransferConfirm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -746,7 +702,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         {{#each data}}
         <!-- Modal History Withdraw Detail -->
@@ -796,7 +752,7 @@
         {{/each}}
         <!-- Modal History Transfer Detail -->
 
-        <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        {{!-- <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -905,56 +861,8 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <!--  Modal History Phone Card Detail -->
-        <div class="modal fade" id="modelHistoryPhoneCardDetail" tabindex="-1" role="dialog"
-            aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Chi tiết giao dịch</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex flex-column gap-2">
-                        <!-- Ngày giao dịch -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryPhoneCardDetailDate">Ngày giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailDate"
-                                placeholder="Ngày giao dịch" disabled />
-                        </div>
-                        <!-- Mã giao dịch -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryPhoneCardDetailCode">Mã giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCode"
-                                placeholder="Mã giao dịch" disabled />
-                        </div>
-                        <!-- Trạng thái -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryPhoneCardDetailStatus">Trạng thái</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailStatus"
-                                placeholder="Trạng thái" disabled />
-                        </div>
-                        <!-- Số tiền -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryPhoneCardDetailMoney">Số tiền</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailMoney"
-                                placeholder="Số tiền" disabled />
-                        </div>
-                        <!-- Mã thẻ -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryPhoneCardDetailCardCode">Mã thẻ</label>
-                            <input type="text" class="form-control" id="inputHistoryPhoneCardDetailCardCode"
-                                placeholder="Mã thẻ" disabled />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Huỷ
-                        </button>
-                        <button type="button" class="btn btn-primary">Xác nhận</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </main>

@@ -1,0 +1,227 @@
+<nav class="navbar navbar-expand navbar-light bg-faded">
+    <div class="container">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <div class="dropdown open">
+            <button class="border-0 bg-transparent dropdown-toggle" type="button" id="triggerId"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="https://via.placeholder.com/30" alt="" class="rounded-2" />
+            </button>
+            <div class="dropdown-menu" aria-labelledby="triggerId">
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modelUserInformation">
+                    Xem thông tin
+                </button>
+                <a class="dropdown-item" href="/user/logout">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="py-3">
+    <div class="container">
+        <div class="row gx-4">
+            <div class="col-lg-4 d-flex flex-column gap-4 mb-4">
+                <div class="rouded-full p-4 rounded-4 fw-bold bg-light">
+                    <span class="border-bottom border-dark border-4 pb-1 d-inline-block mb-3"><i
+                            class="bi bi-wallet-fill me-2"></i>Chức năng</span>
+                    <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelWithdraw">
+                                <i class="bi bi-cash me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/">Quản lý giao
+                                        dịch</a></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-stopwatch me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userNotActivated">Tài
+                                        khoản chờ kích
+                                        hoạt</a></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-check-circle me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userActivated">Tài
+                                        khoản đã kích
+                                        hoạt</a></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-bell-slash-fill me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userDisable">Tài khoản
+                                        đã bị vô hiệu
+                                        hóa</a></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
+                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                <i class="bi bi-lock-fill me-2"></i>
+                                <span><a style="text-decoration: none; color:black" href="/admin/userLocked">Tài khoản
+                                        bị khóa vô thời
+                                        hạn</a></span>
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="rounded-4 p-4 border">
+                    <span class="border-bottom border-dark border-4 pb-1 d-inline-block mb-3 fw-bold"><i
+                            class="bi bi-bell-slash-fill me-2"></i>Danh sách tài khoản đã bị vô hiệu hóa</span>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Họ Tên</th>
+                                <th>Email</th>
+                                <th>Địa chỉ</th>
+                                <th>Ngày tạo</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {{#each data}}
+                            <tr data-bs-toggle="modal" data-bs-target="#modelHistoryWithdrawDetail{{id}}">
+                                <td>
+                                    <i class="{{icon}}"></i>
+                                </td>
+                                <td>{{fullname}}</td>
+                                <td>{{email}}</td>
+                                <td>
+                                    <span>{{address}}</span>
+                                </td>
+                                <td>{{createdAt}}</td>
+
+                            </tr>
+                            {{/each}}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal User Information -->
+        <div class="modal fade" id="modelUserInformation" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thông tin cá nhân</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body d-flex flex-column gap-2">
+
+                        <div class="form-group d-flex flex-column gap-1">
+                            <!-- Họ và tên -->
+
+                            <label for="">Họ và tên</label>
+                            <input value="{{fullname}}" type="text" class="form-control" id="inputUserFullName"
+                                placeholder="Họ và tên" disabled />
+
+                        </div>
+                        <!-- Tên người dùng -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Tên người dùng</label>
+                            <input value="{{username}}" type="text" class="form-control" id="inputUserUsername"
+                                placeholder="Tên người dùng" disabled />
+                        </div>
+                        <!-- Số điện thoại -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Số điện thoại</label>
+                            <input value="{{phone}}" type="text" class="form-control" id="inputUserPhone"
+                                placeholder="Số điện thoại" disabled />
+                        </div>
+                        <!-- Email -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="">Email</label>
+                            <input value="{{email}}" type="text" class="form-control" id="inputUserEmail"
+                                placeholder="Email" disabled />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        {{#each data}}
+        <!-- Modal History Withdraw Detail -->
+        <div class="modal fade" id="modelHistoryWithdrawDetail{{id}}" tabindex="-1" role="dialog"
+            aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Chi tiết giao dịch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column gap-2">
+                        <!-- ID tài khoản -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailCode">ID tài khoản</label>
+                            <input value="{{id}}" type="text" class="form-control" id="inputHistoryWithdrawDetailCode"
+                                placeholder="ID tài khoản" disabled />
+                        </div>
+                        <!-- Tên tài khoản -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailCode">Tên tài khoản</label>
+                            <input value="{{username}}" type="text" class="form-control"
+                                id="inputHistoryWithdrawDetailCode" placeholder="Tên tài khoản" disabled />
+                        </div>
+                        <!-- Ngày Sinh -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailDate">Ngày Sinh</label>
+                            <input value="{{birth}}" type="text" class="form-control"
+                                id="inputHistoryWithdrawDetailDate" placeholder="Ngày Sinh" disabled />
+                        </div>
+
+                        <!-- Trạng thái -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailStatus">Trạng thái</label>
+                            <input value="{{status}}" type="text" class="form-control"
+                                id="inputHistoryWithdrawDetailStatus" placeholder="Trạng thái" disabled />
+                        </div>
+                        <!-- Mặt trước cmnd -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailMoney">Mặt trước CMND</label>
+                            <img src="{{frontID}}" alt="">
+                        </div>
+                        <!-- Mặt sau CMND -->
+                        <div class="form-group d-flex flex-column gap-1">
+                            <label for="inputHistoryWithdrawDetailMoney">Mặt sau CMND</label>
+                            <img src="{{backID}}" alt="">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        <!-- Modal History Transfer Detail -->
+
+    </div>
+</main>

@@ -37,11 +37,11 @@ function sendEmailVerify(req, res, email) {
         else {
             req.session.codeToken = codeToken
             const transporter = nodemailer.createTransport({
-                host: process.env.TRANSPORTER_HOST,
-                port: process.env.TRANSPORTER_PORT,
+                host: 'mail.phongdaotao.com',
+                port: 25,
                 auth: {
-                    user: process.env.TRANSPORTER_USER,
-                    pass: process.env.TRANSPORTER_PASS
+                    user: 'sinhvien@phongdaotao.com ',
+                    pass: 'svtdtu'
                 }
             });
 
@@ -190,25 +190,13 @@ const UserController = {
             return fs.mkdir(userDir, () => {
                 const hash = hashPassword(password)
                 // Create transport
-                // const transporter = nodemailer.createTransport({
-                //     host: 'mail.phongdaotao.com',
-                //     port: 25,
-                //     secure: false,
-                //     auth: {
-                //         user: "sinhvien@phongdaotao.com",
-                //         pass: "svtdtu",
-                //     },
-                //     tls: {
-                //         rejectUnauthorized: false,
-                //     }
-                // });
 
                 const transporter = nodemailer.createTransport({
-                    host: 'smtp.ethereal.email',
-                    port: 587,
+                    host: 'mail.phongdaotao.com',
+                    port: 25,
                     auth: {
-                        user: 'jaeden.okuneva90@ethereal.email',
-                        pass: '3q2TM6yZQddda8s5Q3'
+                        user: 'sinhvien@phongdaotao.com ',
+                        pass: 'svtdtu'
                     }
                 });
 
@@ -241,8 +229,9 @@ const UserController = {
                     birth: req.body.birth,
                     username: username,
                     password: hash,
-                    frontID: imagePath[0],
-                    backID: imagePath[1]
+                    frontID: `/uploads/users/${req.body.email}/${req.files[file][0].filename}`,
+                    backID: `/uploads/users/${req.body.email}/${req.files[file][0].filename}`
+
                 }
 
                 return new User(user).save()
@@ -679,9 +668,11 @@ const UserController = {
                     req.flash('error', 'Tài khoản này không tồn tại');
                     return res.redirect('/user/transfer');
                 }
-
+                let Payer = false
+                if (isFeePayer == 'true')
+                    Payer = true
                 var amountInt = parseInt(amount);
-                var total = (isFeePayer) ? amountInt * 105 / 100 : amountInt;
+                var total = (Payer) ? amountInt * 105 / 100 : amountInt;
 
                 if (total > req.getUser.balance) {
                     req.flash('error', 'Số dư trong ví không đủ');
@@ -692,20 +683,18 @@ const UserController = {
                     action: 'Chuyển tiền',
                     receiver: receiver.fullname,
                     amount: amountInt,
-                    fee: (isFeePayer) ? (amountInt * 5 / 100) : 0,
+                    fee: (Payer) ? (amountInt * 5 / 100) : 0,
                     note: note,
                     createdAt: new Date(),
-                    status: (amountInt > 5000000) ? 'Đang chờ duyệt' : 'Hoàn thành',
+                    status: (amountInt >= 5000000) ? 'Đang chờ duyệt' : 'Hoàn thành',
                 }
-
-
                 const OTPCode = `${Math.floor(100000 + Math.random() * 900000)}`
                 const transporter = nodemailer.createTransport({
-                    host: 'smtp.ethereal.email',
-                    port: 587,
+                    host: 'mail.phongdaotao.com',
+                    port: 25,
                     auth: {
-                        user: 'jaeden.okuneva90@ethereal.email',
-                        pass: '3q2TM6yZQddda8s5Q3'
+                        user: 'sinhvien@phongdaotao.com ',
+                        pass: 'svtdtu'
                     }
                 });
                 const msg = {
@@ -760,13 +749,14 @@ const UserController = {
             .then(result => {
                 const email = result.UserEmail
                 User.findOne({ email })
-                    .then(async receiver => {
+                    .then(receiver => {
                         const trade = req.session.trade;
-                        req.getUser.history.push(trade);
+                        const user = req.getUser
+                        // res.json({ code: 1, data: user })
+                        user.history.push(trade);
                         if (trade.status === 'Hoàn thành') {
                             req.getUser.balance -= (trade.amount + trade.fee);
                             req.getUser.save();
-
                             receiver.balance += (trade.fee == 0) ? (trade.amount - fee) : trade.amount;
                             receiver.save();
                             req.flash('success', 'Chuyển tiền thành công');

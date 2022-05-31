@@ -90,32 +90,118 @@ const AdminController = {
     },
     getUserNotActivated: async function (req, res) {
         try {
+            const admin = await User.findOne({ username: 'admin' })
             const ListUserNotActivated = await User.find({ status: 'Not_verified' })
-            res.json({ code: 1, users: ListUserNotActivated })
+            const user = ListUserNotActivated.map(u => {
+                return {
+                    id: u._id,
+                    fullname: u.fullname,
+                    email: u.email,
+                    address: u.address,
+                    birth: normalizeDate(u.birth),
+                    createdAt: normalizeDate(u.createAt),
+                    status: u.status,
+                    backID: u.backID,
+                    frontID: u.frontID,
+                    username: u.username,
+                }
+            })
+            res.render('listNotActived', {
+                data: user,
+                fullname: admin.fullname,
+                username: admin.username,
+                phone: admin.phone,
+                email: admin.email
+            })
         } catch (err) {
             console.log(err)
         }
     },
     getUserActivated: async function (req, res) {
         try {
+            const admin = await User.findOne({ username: 'admin' })
             const ListUserActivated = await User.find({ status: 'Verified' }).sort({ createAt: -1 })
-            res.json({ code: 1, users: ListUserActivated })
+            const user = ListUserActivated.map(u => {
+                return {
+                    id: u._id,
+                    fullname: u.fullname,
+                    email: u.email,
+                    address: u.address,
+                    birth: normalizeDate(u.birth),
+                    createdAt: normalizeDate(u.createAt),
+                    status: u.status,
+                    backID: u.backID,
+                    frontID: u.frontID,
+                    username: u.username,
+                }
+            })
+            res.render('listActivated', {
+                data: user,
+                fullname: admin.fullname,
+                username: admin.username,
+                phone: admin.phone,
+                email: admin.email
+            })
         } catch (err) {
             console.log(err)
         }
     },
     getUserDisable: async function (req, res) {
         try {
-            const ListUserDisable = await User.find({ status: 'Disable' }).sort({ createAt: -1 })
-            res.json({ code: 1, users: ListUserDisable })
+            const admin = await User.findOne({ username: 'admin' })
+            const ListUserDisable = await User.find({ status: 'Disabled' }).sort({ createAt: -1 })
+            const user = ListUserDisable.map(u => {
+                return {
+                    id: u._id,
+                    fullname: u.fullname,
+                    email: u.email,
+                    address: u.address,
+                    birth: normalizeDate(u.birth),
+                    createdAt: normalizeDate(u.createAt),
+                    status: u.status,
+                    backID: u.backID,
+                    frontID: u.frontID,
+                    username: u.username,
+                }
+            })
+            res.render('listDisable', {
+                data: user,
+                fullname: admin.fullname,
+                username: admin.username,
+                phone: admin.phone,
+                email: admin.email
+            })
         } catch (err) {
             console.log(err)
         }
     },
     getUserLocked: async function (req, res) {
         try {
+            const admin = await User.findOne({ username: 'admin' })
             const ListUserLocked = await User.find({ status: 'Locked' }).sort({ blockAt: -1 })
-            res.json({ code: 1, users: ListUserLocked })
+            const user = ListUserLocked.map(u => {
+                return {
+                    id: u._id,
+                    fullname: u.fullname,
+                    email: u.email,
+                    address: u.address,
+                    birth: normalizeDate(u.birth),
+                    createdAt: normalizeDate(u.createAt),
+                    status: u.status,
+                    backID: u.backID,
+                    frontID: u.frontID,
+                    username: u.username,
+                    failAccess: u.failAccess,
+                    blockAt: normalizeDate(u.blockAt)
+                }
+            })
+            res.render('listLocked', {
+                data: user,
+                fullname: admin.fullname,
+                username: admin.username,
+                phone: admin.phone,
+                email: admin.email
+            })
         } catch (err) {
             console.log(err)
         }
@@ -126,7 +212,7 @@ const AdminController = {
         try {
             const id = req.params.id
             const user = await User.findByIdAndUpdate(id, { status: 'Verified' })
-            res.json({ code: 1, users: user })
+            res.redirect('/admin/')
         } catch (error) {
             console.log(error)
         }
@@ -136,7 +222,7 @@ const AdminController = {
         try {
             const id = req.params.id
             const user = await User.findByIdAndUpdate(id, { status: 'Wait_for_update' })
-            res.json({ code: 1, users: user })
+            res.redirect('/admin/')
         } catch (error) {
             console.log(error)
         }
@@ -146,7 +232,7 @@ const AdminController = {
         try {
             const id = req.params.id
             const user = await User.findByIdAndUpdate(id, { status: 'Disabled' })
-            res.json({ code: 1, users: user })
+            res.redirect('/admin/')
         } catch (error) {
             console.log(error)
         }
@@ -156,7 +242,7 @@ const AdminController = {
         try {
             const id = req.params.id
             const user = await User.findByIdAndUpdate(id, { status: 'Not_verified', failAccess: 0 })
-            res.json({ code: 1, users: user })
+            res.redirect('/admin/')
         } catch (error) {
             console.log(error)
         }

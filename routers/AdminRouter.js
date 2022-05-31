@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const AdminController = require('../controllers/AdminController')
-const checkAdmin = require('../auth/checkAdmin')
 const checkLogin = require('../auth/checkLogin')
 
 router.get('/', checkLogin, AdminController.getIndex)
