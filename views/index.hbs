@@ -17,13 +17,15 @@
                     <span class="border-bottom border-dark border-4 pb-1 d-inline-block mb-3"><i
                             class="bi bi-wallet-fill me-2"></i>Số dư Ví:</span>
                     <div class="bg-white px-3 py-2 d-flex justify-content-between align-items-center rounded-2 mb-3">
-                        <span class="text-success h5">1.000.000</span>
+                        <span class="text-success h5">{{balance}}</span>
                         <span>VNĐ</span>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <button class="border px-3 py-1 rounded-2 bg-transparent border-dark">
+                        <a href="/user/deposit">
+                            <button class="border px-3 py-1 rounded-2 bg-transparent border-dark">
                             Nạp tiền
-                        </button>
+                            </button>
+                        </a>
                     </div>
                 </div>
                 <div class="rouded-full p-4 rounded-4 fw-bold bg-light">
@@ -32,32 +34,32 @@
                     <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
                         <li>
                             <button
-                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
-                                data-bs-toggle="modal" data-bs-target="#modelDeposit">
+                                id="btnDeposit"
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-bank me-2"></i>
-                                <span>Nạp tiền</span>
+                                <span> Nạp tiền </span>
                             </button>
                         </li>
                         <li>
                             <button
-                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
-                                data-bs-toggle="modal" data-bs-target="#modelWithdraw">
+                                id="btnWithdraw"
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-cash me-2"></i>
                                 <span>Rút tiền </span>
                             </button>
                         </li>
                         <li>
                             <button
-                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
-                                data-bs-toggle="modal" data-bs-target="#modelTransfer">
+                                id="btnTransfer"
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-arrow-down-up me-2"></i>
                                 <span>Chuyển tiên</span>
                             </button>
                         </li>
                         <li>
                             <button
-                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2"
-                                data-bs-toggle="modal" data-bs-target="#modelPhoneCard">
+                                id="btnBuyCard"
+                                class="fw-bold text-start bg-white px-3 py-2 w-100 border border-secondary rounded-2">
                                 <i class="bi bi-phone me-2"></i>
                                 <span>Mua thẻ điện thoại</span>
                             </button>
@@ -80,50 +82,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-bs-toggle="modal" data-bs-target="#modelHistoryTransferDetail">
-                                <td>
-                                    <i class="bi bi-bank"></i>
-                                </td>
-                                <td>Nạp tiền</td>
-                                <td>1.000.000</td>
-                                <td>01/01/2020</td>
-                                <td class="text-success">
-                                    <i class="bi bi-dot me-1"></i><span>Thành công</span>
-                                </td>
-                            </tr>
-                            <tr data-bs-toggle="modal" data-bs-target="#modelHistoryWithdrawDetail">
-                                <td>
-                                    <i class="bi bi-cash"></i>
-                                </td>
-                                <td>Rút tiền</td>
-                                <td>1.000.000</td>
-                                <td>01/01/2020</td>
-                                <td class="text-danger">
-                                    <i class="bi bi-dot me-1"></i><span>Thất bại</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <i class="bi bi-cash"></i>
-                                </td>
-                                <td>Rút tiền</td>
-                                <td>1.000.000</td>
-                                <td>01/01/2020</td>
-                                <td class="text-secondary">
-                                    <i class="bi bi-dot me-1"></i><span>Đang chờ</span>
-                                </td>
-                            </tr>
-                            <tr data-bs-toggle="modal" data-bs-target="#modelHistoryPhoneCardDetail">
-                                <td>
-                                    <i class="bi bi-phone"></i>
-                                </td>
-                                <td>Mua thẻ điên thoại</td>
-                                <td>1.000.000</td>
-                                <td>01/01/2020</td>
-                                <td class="text-success">
-                                    <i class="bi bi-dot me-1"></i><span>Thành công</span>
-                                </td>
-                            </tr>
+                            {{#each data}}
+                                <tr data-bs-toggle="modal" data-bs-target="#modelHistoryTransferDetail">
+                                    <td>
+                                        <i class="{{icon}} me-2"></i>
+                                    </td>
+                                    <td>{{action}}</td>
+                                    <td>{{amount}}</td>
+                                    <td>{{createdAt}}</td>
+                                    <td class="text-{{style}}">
+                                        <span>{{status}}</span>
+                                    </td>
+                                </tr>
+                            {{/each}}
+
+                            
                         </tbody>
                     </table>
                 </div>
@@ -153,12 +126,12 @@
                             </div>
                             <div class="form-group d-flex flex-column gap-1">
                                 <label for="inputDepositCardCodeCVV">Mã CVV</label>
-                                <input name="cvv_code" type="text" class="form-control" id="inputDepositCardCodeCVV"
+                                <input name="cvv_code" type="password" class="form-control" id="inputDepositCardCodeCVV"
                                     placeholder="Nhập mã CVV" />
                             </div>
                             <div class="form-group d-flex flex-column gap-1">
                                 <label for="inputDepositAmount">Số tiền</label>
-                                <input name="amount" type="password" class="form-control" id="inputDepositAmount"
+                                <input name="amount" type="text" class="form-control" id="inputDepositAmount"
                                     placeholder="Nhập số tiền" />
                             </div>
                         </div>
@@ -166,7 +139,7 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Huỷ
                             </button>
-                            <button type="button" class="btn btn-primary" id="btnNextToDepositConfirm">
+                            <button type="submit" class="btn btn-primary" id="btnNextToDepositConfirm">
                                 Tiếp theo
                             </button>
                         </div>

@@ -24,7 +24,7 @@ router.post('/login', loginValidator, UserController.postLogin)
 router.get('/logout', UserController.getLogout)
 
 // Index page
-router.get('/', checkLogin, checkUser, UserController.getIndex)
+router.get('/', checkLogin, checkUser, middleware.getUser, UserController.getIndex)
 
 // Reset Password In First Access
 router.get('/resetPassword', checkLogin, middleware.roleResetPassword, UserController.getResetPassword)

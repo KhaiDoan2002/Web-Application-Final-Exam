@@ -43,206 +43,225 @@ function countDownVerify() {
     }, 70000);
 }
 
-const inputWithdrawAmountToWithdraw = document.getElementById(
-    'inputWithdrawAmountToWithdraw'
-)
-
-const inputWithdrawFee = document.getElementById('inputWithdrawFee')
-const alertWithdrawAmountToWithdraw = document.getElementById(
-    'alertWithdrawAmountToWithdraw'
-)
-
-const inputWithdrawTotalAmount = document.getElementById(
-    'inputWithdrawTotalAmount'
-)
-
-const btnNextToTransferConfirm = document.getElementById(
-    'btnNextToTransferConfirm'
-)
-const btnPreviousToTransfer = document.getElementById('btnPreviousToTransfer')
-const btnNextToDepositConfirm = document.getElementById(
-    'btnNextToDepositConfirm'
-)
-const btnPreviousToDeposit = document.getElementById('btnPreviousToDeposit')
-const btnNextToPhoneCardConfirm = document.getElementById(
-    'btnNextToPhoneCardConfirm'
-)
-const btnPreviousToPhoneCard = document.getElementById('btnPreviousToPhoneCard')
-
-let modelTransfer = document.getElementById('modelTransfer')
-let modelTransferConfirm = document.getElementById('modelTransferConfirm')
-let modelDeposit = document.getElementById('modelDeposit')
-let modelDepositConfirm = document.getElementById('modelDepositConfirm')
-let modelWithdraw = document.getElementById('modelWithdraw')
-let modelWithdrawConfirm = document.getElementById('modelWithdrawConfirm')
-let modelPhoneCard = document.getElementById('modelPhoneCard')
-let modelPhoneCardConfirm = document.getElementById('modelPhoneCardConfirm')
-
-const inputTransferCardNumber = document.getElementById(
-    'inputTransferCardNumber'
-)
-const inputTransferName = document.getElementById('inputTransferName')
-
-inputWithdrawAmountToWithdraw.addEventListener('keyup', function (event) {
-    event.preventDefault()
-    // inputWithdrawAmountToWithdraw divide by 50000
-    const inputWithdrawAmountToWithdrawValue = parseInt(
-        inputWithdrawAmountToWithdraw.value
-    )
-    if (inputWithdrawAmountToWithdrawValue % 50000 === 0) {
-        alertWithdrawAmountToWithdraw.classList.add('d-none')
-    } else {
-        alertWithdrawAmountToWithdraw.classList.remove('d-none')
-    }
-    console.log(inputWithdrawAmountToWithdrawValue * 0.05)
-    inputWithdrawFee.value = parseInt(inputWithdrawAmountToWithdrawValue) * 0.05
-    inputWithdrawTotalAmount.value =
-        parseInt(inputWithdrawFee.value) +
-        parseInt(inputWithdrawAmountToWithdrawValue)
+const btnDeposit = document.getElementById('btnDeposit');
+btnDeposit.addEventListener('click', function() {
+    window.location.href = '/user/deposit'
 })
 
-modelTransfer = new bootstrap.Modal(modelTransfer, {
-    keyboard: false,
+const btnWithdraw = document.getElementById('btnWithdraw');
+btnWithdraw.addEventListener('click', function() {
+    window.location.href = '/user/withdraw'
 })
 
-modelTransferConfirm = new bootstrap.Modal(modelTransferConfirm, {
-    keyboard: false,
+const btnTransfer = document.getElementById('btnTransfer');
+btnTransfer.addEventListener('click', function() {
+    window.location.href = '/user/transfer'
 })
 
-modelDeposit = new bootstrap.Modal(modelDeposit, {
-    keyboard: false,
+const btnBuyCard = document.getElementById('btnBuyCard');
+btnBuyCard.addEventListener('click', function() {
+    window.location.href = '/user/buycard'
 })
+// const inputWithdrawAmountToWithdraw = document.getElementById(
+//     'inputWithdrawAmountToWithdraw'
+// )
 
-modelDepositConfirm = new bootstrap.Modal(modelDepositConfirm, {
-    keyboard: false,
-})
+// const inputWithdrawFee = document.getElementById('inputWithdrawFee')
+// const alertWithdrawAmountToWithdraw = document.getElementById(
+//     'alertWithdrawAmountToWithdraw'
+// )
 
-modelPhoneCard = new bootstrap.Modal(modelPhoneCard, {
-    keyboard: false,
-})
+// const inputWithdrawTotalAmount = document.getElementById(
+//     'inputWithdrawTotalAmount'
+// )
 
-modelPhoneCardConfirm = new bootstrap.Modal(modelPhoneCardConfirm, {
-    keyboard: false,
-})
+// const btnNextToTransferConfirm = document.getElementById(
+//     'btnNextToTransferConfirm'
+// )
+// const btnPreviousToTransfer = document.getElementById('btnPreviousToTransfer')
+// const btnNextToDepositConfirm = document.getElementById(
+//     'btnNextToDepositConfirm'
+// )
+// const btnPreviousToDeposit = document.getElementById('btnPreviousToDeposit')
+// const btnNextToPhoneCardConfirm = document.getElementById(
+//     'btnNextToPhoneCardConfirm'
+// )
+// const btnPreviousToPhoneCard = document.getElementById('btnPreviousToPhoneCard')
 
-btnNextToTransferConfirm.addEventListener('click', function (event) {
-    event.preventDefault()
-    modelTransfer.hide()
-    modelTransferConfirm.show()
+// let modelTransfer = document.getElementById('modelTransfer')
+// let modelTransferConfirm = document.getElementById('modelTransferConfirm')
+// let modelDeposit = document.getElementById('modelDeposit')
+// let modelDepositConfirm = document.getElementById('modelDepositConfirm')
+// let modelWithdraw = document.getElementById('modelWithdraw')
+// let modelWithdrawConfirm = document.getElementById('modelWithdrawConfirm')
+// let modelPhoneCard = document.getElementById('modelPhoneCard')
+// let modelPhoneCardConfirm = document.getElementById('modelPhoneCardConfirm')
 
-    const inputTransferCardNumber = document.getElementById(
-        'inputTransferCardNumber'
-    )
-    const inputTransferName = document.getElementById('inputTransferName')
-    const inputTransferAmount = document.getElementById('inputTransferAmount')
-    const inputTransferNote = document.getElementById('inputTransferNote')
-    const inputTransferFee = document.getElementById('inputTransferFee')
+// const inputTransferCardNumber = document.getElementById(
+//     'inputTransferCardNumber'
+// )
+// const inputTransferName = document.getElementById('inputTransferName')
 
-    const inputTransferConfirmCardNumber = document.getElementById(
-        'inputTransferConfirmCardNumber'
-    )
-    const inputTransferConfirmName = document.getElementById(
-        'inputTransferConfirmName'
-    )
-    const inputTransferConfirmAmount = document.getElementById(
-        'inputTransferConfirmAmount'
-    )
-    const inputTransferConfirmNote = document.getElementById(
-        'inputTransferConfirmNote'
-    )
-    const inputTransferConfirmFee = document.getElementById(
-        'inputTransferConfirmFee'
-    )
-    inputTransferConfirmCardNumber.value = inputTransferCardNumber.value
-    inputTransferConfirmName.value = inputTransferName.value
-    inputTransferConfirmAmount.value = inputTransferAmount.value
-    inputTransferConfirmNote.value = inputTransferNote.value
-    inputTransferConfirmFee.value = inputTransferFee.value
-})
+// inputWithdrawAmountToWithdraw.addEventListener('keyup', function (event) {
+//     event.preventDefault()
+//     // inputWithdrawAmountToWithdraw divide by 50000
+//     const inputWithdrawAmountToWithdrawValue = parseInt(
+//         inputWithdrawAmountToWithdraw.value
+//     )
+//     if (inputWithdrawAmountToWithdrawValue % 50000 === 0) {
+//         alertWithdrawAmountToWithdraw.classList.add('d-none')
+//     } else {
+//         alertWithdrawAmountToWithdraw.classList.remove('d-none')
+//     }
+//     console.log(inputWithdrawAmountToWithdrawValue * 0.05)
+//     inputWithdrawFee.value = parseInt(inputWithdrawAmountToWithdrawValue) * 0.05
+//     inputWithdrawTotalAmount.value =
+//         parseInt(inputWithdrawFee.value) +
+//         parseInt(inputWithdrawAmountToWithdrawValue)
+// })
 
-btnPreviousToTransfer.addEventListener('click', function (event) {
-    event.preventDefault()
-    modelTransfer.show()
-    modelTransferConfirm.hide()
-})
+// modelTransfer = new bootstrap.Modal(modelTransfer, {
+//     keyboard: false,
+// })
 
-btnNextToDepositConfirm.addEventListener('click', function (event) {
-    event.preventDefault()
-    modelDeposit.hide()
-    modelDepositConfirm.show()
+// modelTransferConfirm = new bootstrap.Modal(modelTransferConfirm, {
+//     keyboard: false,
+// })
 
-    const inputDepositCardNumber = document.getElementById(
-        'inputDepositCardNumber'
-    )
-    const inputDepositCardExpirationDate = document.getElementById(
-        'inputDepositCardExpirationDate'
-    )
-    const inputDepositCardCodeCVV = document.getElementById(
-        'inputDepositCardCodeCVV'
-    )
-    const inputDepositAmount = document.getElementById('inputDepositAmount')
+// modelDeposit = new bootstrap.Modal(modelDeposit, {
+//     keyboard: false,
+// })
 
-    const inputDepositConfirmCardNumber = document.getElementById(
-        'inputDepositConfirmCardNumber'
-    )
-    const inputDepositConfirmCardExpirationDate = document.getElementById(
-        'inputDepositConfirmCardExpirationDate'
-    )
-    const inputDepositConfirmCardCodeCVV = document.getElementById(
-        'inputDepositConfirmCardCodeCVV'
-    )
-    const inputDepositConfirmAmount = document.getElementById(
-        'inputDepositConfirmAmount'
-    )
+// modelDepositConfirm = new bootstrap.Modal(modelDepositConfirm, {
+//     keyboard: false,
+// })
 
-    inputDepositConfirmCardNumber.value = inputDepositCardNumber.value
-    inputDepositConfirmCardExpirationDate.value =
-        inputDepositCardExpirationDate.value
-    inputDepositConfirmCardCodeCVV.value = inputDepositCardCodeCVV.value
-    inputDepositConfirmAmount.value = inputDepositAmount.value
-})
+// modelPhoneCard = new bootstrap.Modal(modelPhoneCard, {
+//     keyboard: false,
+// })
 
-btnPreviousToDeposit.addEventListener('click', function (event) {
-    event.preventDefault()
-    modelDeposit.show()
-    modelDepositConfirm.hide()
-})
+// modelPhoneCardConfirm = new bootstrap.Modal(modelPhoneCardConfirm, {
+//     keyboard: false,
+// })
 
-btnNextToPhoneCardConfirm.addEventListener('click', function (event) {
-    event.preventDefault()
-    modelPhoneCard.hide()
-    modelPhoneCardConfirm.show()
+// btnNextToTransferConfirm.addEventListener('click', function (event) {
+//     event.preventDefault()
+//     modelTransfer.hide()
+//     modelTransferConfirm.show()
 
-    const inputPhoneCardNetwork = document.getElementById('inputPhoneCardNetwork')
-    const inputPhoneCardPrice = document.getElementById('inputPhoneCardPrice')
-    const inputPhoneCardQuantity = document.getElementById(
-        'inputPhoneCardQuantity'
-    )
+//     const inputTransferCardNumber = document.getElementById(
+//         'inputTransferCardNumber'
+//     )
+//     const inputTransferName = document.getElementById('inputTransferName')
+//     const inputTransferAmount = document.getElementById('inputTransferAmount')
+//     const inputTransferNote = document.getElementById('inputTransferNote')
+//     const inputTransferFee = document.getElementById('inputTransferFee')
 
-    const inputPhoneCardConfirmNetwork = document.getElementById(
-        'inputPhoneCardConfirmNetwork'
-    )
-    const inputPhoneCardConfirmPrice = document.getElementById(
-        'inputPhoneCardConfirmPrice'
-    )
-    const inputPhoneCardConfirmQuantity = document.getElementById(
-        'inputPhoneCardConfirmQuantity'
-    )
+//     const inputTransferConfirmCardNumber = document.getElementById(
+//         'inputTransferConfirmCardNumber'
+//     )
+//     const inputTransferConfirmName = document.getElementById(
+//         'inputTransferConfirmName'
+//     )
+//     const inputTransferConfirmAmount = document.getElementById(
+//         'inputTransferConfirmAmount'
+//     )
+//     const inputTransferConfirmNote = document.getElementById(
+//         'inputTransferConfirmNote'
+//     )
+//     const inputTransferConfirmFee = document.getElementById(
+//         'inputTransferConfirmFee'
+//     )
+//     inputTransferConfirmCardNumber.value = inputTransferCardNumber.value
+//     inputTransferConfirmName.value = inputTransferName.value
+//     inputTransferConfirmAmount.value = inputTransferAmount.value
+//     inputTransferConfirmNote.value = inputTransferNote.value
+//     inputTransferConfirmFee.value = inputTransferFee.value
+// })
 
-    inputPhoneCardConfirmNetwork.value = inputPhoneCardNetwork.value
-    inputPhoneCardConfirmPrice.value = inputPhoneCardPrice.value
-    inputPhoneCardConfirmQuantity.value = inputPhoneCardQuantity.value
-})
+// btnPreviousToTransfer.addEventListener('click', function (event) {
+//     event.preventDefault()
+//     modelTransfer.show()
+//     modelTransferConfirm.hide()
+// })
 
-btnPreviousToPhoneCard.addEventListener('click', function (event) {
-    event.preventDefault()
-    modelPhoneCard.show()
-    modelPhoneCardConfirm.hide()
-})
+// // btnNextToDepositConfirm.addEventListener('click', function (event) {
+// //     event.preventDefault()
+// //     modelDeposit.hide()
+// //     modelDepositConfirm.show()
 
-// Event out focus input transfer card number
-inputTransferCardNumber.addEventListener('blur', function (event) {
-    event.preventDefault()
-    // Fetch name from API
-    const inputTransferCardNumberValue = inputTransferCardNumber.value
-})
+// //     const inputDepositCardNumber = document.getElementById(
+// //         'inputDepositCardNumber'
+// //     )
+// //     const inputDepositCardExpirationDate = document.getElementById(
+// //         'inputDepositCardExpirationDate'
+// //     )
+// //     const inputDepositCardCodeCVV = document.getElementById(
+// //         'inputDepositCardCodeCVV'
+// //     )
+// //     const inputDepositAmount = document.getElementById('inputDepositAmount')
+
+// //     const inputDepositConfirmCardNumber = document.getElementById(
+// //         'inputDepositConfirmCardNumber'
+// //     )
+// //     const inputDepositConfirmCardExpirationDate = document.getElementById(
+// //         'inputDepositConfirmCardExpirationDate'
+// //     )
+// //     const inputDepositConfirmCardCodeCVV = document.getElementById(
+// //         'inputDepositConfirmCardCodeCVV'
+// //     )
+// //     const inputDepositConfirmAmount = document.getElementById(
+// //         'inputDepositConfirmAmount'
+// //     )
+
+// //     inputDepositConfirmCardNumber.value = inputDepositCardNumber.value
+// //     inputDepositConfirmCardExpirationDate.value =
+// //         inputDepositCardExpirationDate.value
+// //     inputDepositConfirmCardCodeCVV.value = inputDepositCardCodeCVV.value
+// //     inputDepositConfirmAmount.value = inputDepositAmount.value
+// // })
+
+// btnPreviousToDeposit.addEventListener('click', function (event) {
+//     event.preventDefault()
+//     modelDeposit.show()
+//     modelDepositConfirm.hide()
+// })
+
+// btnNextToPhoneCardConfirm.addEventListener('click', function (event) {
+//     event.preventDefault()
+//     modelPhoneCard.hide()
+//     modelPhoneCardConfirm.show()
+
+//     const inputPhoneCardNetwork = document.getElementById('inputPhoneCardNetwork')
+//     const inputPhoneCardPrice = document.getElementById('inputPhoneCardPrice')
+//     const inputPhoneCardQuantity = document.getElementById(
+//         'inputPhoneCardQuantity'
+//     )
+
+//     const inputPhoneCardConfirmNetwork = document.getElementById(
+//         'inputPhoneCardConfirmNetwork'
+//     )
+//     const inputPhoneCardConfirmPrice = document.getElementById(
+//         'inputPhoneCardConfirmPrice'
+//     )
+//     const inputPhoneCardConfirmQuantity = document.getElementById(
+//         'inputPhoneCardConfirmQuantity'
+//     )
+
+//     inputPhoneCardConfirmNetwork.value = inputPhoneCardNetwork.value
+//     inputPhoneCardConfirmPrice.value = inputPhoneCardPrice.value
+//     inputPhoneCardConfirmQuantity.value = inputPhoneCardQuantity.value
+// })
+
+// btnPreviousToPhoneCard.addEventListener('click', function (event) {
+//     event.preventDefault()
+//     modelPhoneCard.show()
+//     modelPhoneCardConfirm.hide()
+// })
+
+// // Event out focus input transfer card number
+// inputTransferCardNumber.addEventListener('blur', function (event) {
+//     event.preventDefault()
+//     // Fetch name from API
+//     const inputTransferCardNumberValue = inputTransferCardNumber.value
+// })

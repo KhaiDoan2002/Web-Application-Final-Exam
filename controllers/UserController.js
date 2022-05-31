@@ -10,6 +10,7 @@ const User = require('../models/UserModel')
 const CreditCard = require('../models/CreditCard')
 const OTP = require('../models/OTP')
 const Provider = require('../models/Provider')
+const { stopWithdraw, normalizeDate, checkErrorInput } = require('../middleware/functions')
 
 function fileValidator(req) {
     let message
@@ -79,7 +80,47 @@ function sendEmailVerify(req, res, email) {
 
 const UserController = {
     getIndex: function (req, res) {
-        res.render('index')
+        const user = req.getUser;
+        const balance = user.balance;
+        const context = (user.history).map(h => {
+            let icon = '';
+            
+            if(h._doc.action == 'Rút tiền') {
+                icon = 'bi bi-cash';
+            }
+            else if(h._doc.action == 'Chuyển tiền') {
+                icon = 'bi bi-arrow-down-up';
+            }
+            else if(h._doc.action.includes('Mua thẻ')) {
+                icon = 'bi bi-phone';
+            }
+            else {
+                icon = 'bi bi-bank';
+            }
+
+            let style = '';
+            if(h._doc.status == 'Hoàn thành') {
+                style = 'success';
+            }
+            else if(h._doc.status == 'Đang chờ duyệt') {
+                style = 'warning';
+            }
+            else {
+                style = 'danger';
+            }
+
+            return {
+                action: h._doc.action,
+                amount: h._doc.amount,
+                createdAt: normalizeDate(h._doc.createdAt),
+                status: h._doc.status,
+                icon: icon,
+                style: style
+            };
+        });
+        
+        
+        res.render('index', {balance, data: context})
     },
     getRegister: function (req, res) {
         const error = req.flash('error') || ""
@@ -98,6 +139,7 @@ const UserController = {
             const { root } = req.vars
             const userDir = `${root}/public/uploads/users/${req.body.email}`
             const password = Math.random().toString(36).substring(2, 8);
+            console.log(password);
             const username = new Date().getTime().toString().slice(-11, -1);
             const { email } = req.body
             return fs.mkdir(userDir, () => {
@@ -243,7 +285,7 @@ const UserController = {
                             jwt.sign({
                                 username: account.username,
                             }, JWT_SECRET, {
-                                expiresIn: '15m'
+                                expiresIn: '30m'
                             }, (err, token) => {
                                 if (err) {
                                     req.flash('error', 'Đăng nhập thất bại: ' + err)
@@ -441,22 +483,22 @@ const UserController = {
 
         CreditCard.findOne({ card_no })
             .then(card => {
-                // if (!card) {
-                //     req.flash('error', 'Số thẻ không chính xác');
-                //     return res.redirect('/user/deposit');
-                // }
+                if (!card) {
+                    req.flash('error', 'Số thẻ không chính xác');
+                    return res.redirect('/user/deposit');
+                }
 
-                // const cardExpired = normalizeDate(card.expired);
+                const cardExpired = normalizeDate(card.expired);
 
-                // if (cardExpired != expired) {
-                //     req.flash('error', 'Sai ngày hết hạn');
-                //     return res.redirect('/user/deposit');
-                // }
+                if (cardExpired != expired) {
+                    req.flash('error', 'Sai ngày hết hạn');
+                    return res.redirect('/user/deposit');
+                }
 
-                // if (card.cvv_code !== cvv_code) {
-                //     req.flash('error', 'Sai mã CVV');
-                //     return res.redirect('/user/deposit');
-                // }
+                if (card.cvv_code !== cvv_code) {
+                    req.flash('error', 'Sai mã CVV');
+                    return res.redirect('/user/deposit');
+                }
 
                 var amountInt = parseInt(amount);
 
@@ -496,10 +538,10 @@ const UserController = {
     },
 
     postWithdrawPage: function (req, res, next) {
-        checkErrorInput(req, res, '/user/withdraw');
+        // checkErrorInput(req, res, '/user/withdraw');
 
         const { card_no, expired, cvv_code, amount, note } = req.body;
-
+        console.log(req.getUser);
         let isOver = stopWithdraw(req.getUser);
         if (isOver) {
             req.flash('error', 'Đã hết số lần giao dịch');
@@ -526,7 +568,7 @@ const UserController = {
                 }
 
                 const cardExpired = normalizeDate(card.expired);
-
+                
                 if (cardExpired != expired) {
                     req.flash('error', 'Sai ngày hết hạn');
                     return res.redirect('/user/withdraw');

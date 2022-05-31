@@ -22,6 +22,7 @@ exports.stopWithdraw = (user) => {
 }
 
 exports.normalizeDate = (date) => {
+    
     return date.toISOString().split('T')[0];
 }
 
