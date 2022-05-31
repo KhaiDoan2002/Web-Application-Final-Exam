@@ -1,2 +1,0 @@
-# @name getLisHistory
-GET http://localhost:8080/admin/getHistory
