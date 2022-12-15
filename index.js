@@ -8,6 +8,7 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const database = require('./config/db')
+const CreditCard=require('./models/CreditCard')
 // Import router
 const UserRouter = require('./routers/UserRouter')
 const AdminRouter = require('./routers/AdminRouter')
@@ -19,7 +20,7 @@ app.engine('hbs', handlebars.engine({
 
 // Session & Cookie
 app.use(cookieParser('tkh'))
-app.use(session({ cookie: { maxAge: 60000 } }))
+app.use(session({ cookie: { maxAge: 900000  } })) //1s=1000 15ph=900000
 app.use(flash())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.json())
@@ -29,8 +30,8 @@ app.use((req, res, next) => {
     req.vars = { root: __dirname }
     next()
 })
-
 app.get('/', (req, res) => {
+
     if (!req.session.username) {
         return res.redirect('/user/login')
     }

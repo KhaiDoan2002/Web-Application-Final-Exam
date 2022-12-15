@@ -1,115 +1,67 @@
-$(document).ready(()=>{
-    setTimeout(()=>
-    {
-        $('.success').fadeOut()
-    },2000)
-})
-
 let fail = document.getElementById('failAccess')
-if (fail) 
-{
+if (fail) {
     countDown()
 }
 
 if (document.getElementById('timer'))
     countDownVerify()
 
-function countDown() 
-{
+
+
+function countDown() {
     let minutes = 60
-    let x = setInterval(() => 
-    {
+    let x = setInterval(() => {
         minutes -= 1
         document.getElementById('failAccess').innerHTML = 'Bạn đã nhập sai mật khẩu. '
             + 'Tài khoản của bạn đã bị khóa tạm thời vui lòng thử lại sau 00:' + ((minutes >= 10) ? minutes : ('0' + minutes))
     }, 1000)
 
-    setTimeout(() => 
-    {
+    setTimeout(() => {
         clearInterval(x)
         document.getElementById('failAccess').innerHTML = ''
         location.reload()
     }, 60000);
 }
 
-function countDownVerify() 
-{
+function countDownVerify() {
     let minutes = 60
 
-    let x = setInterval(() => 
-    {
+    let x = setInterval(() => {
         minutes -= 1
         document.getElementById('timer').innerHTML = '00:' + ((minutes >= 10) ? minutes : ('0' + minutes))
     }, 1000)
 
-    setTimeout(() => 
-    {
+    setTimeout(() => {
         clearInterval(x)
         document.getElementById('timer').innerHTML = ''
         document.getElementById('verify-alert').innerHTML = `<div class="alert alert-danger mt-2">Mã OTP đã hết hạn</div>`
         document.getElementById('resend-btn').style.display = 'inline-flex'
     }, 60000);
 
-    setTimeout(() => 
-    {
+    setTimeout(() => {
         document.getElementById('verify-alert').innerHTML = ''
     }, 70000);
 }
 
 const btnDeposit = document.getElementById('btnDeposit');
-btnDeposit.addEventListener('click', function() 
-{
+btnDeposit.addEventListener('click', function() {
     window.location.href = '/user/deposit'
 })
 
 const btnWithdraw = document.getElementById('btnWithdraw');
-btnWithdraw.addEventListener('click', function() 
-{
+btnWithdraw.addEventListener('click', function() {
     window.location.href = '/user/withdraw'
 })
 
 const btnTransfer = document.getElementById('btnTransfer');
-btnTransfer.addEventListener('click', function() 
-{
+btnTransfer.addEventListener('click', function() {
     window.location.href = '/user/transfer'
 })
 
 const btnBuyCard = document.getElementById('btnBuyCard');
-btnBuyCard.addEventListener('click', function() 
-{
+btnBuyCard.addEventListener('click', function() {
     window.location.href = '/user/buycard'
 })
-
-const btnUserChangePassword= document.getElementById('btnUserChangePassword');
-btnUserChangePassword.addEventListener('click', function() 
-{
-    let newPass=$('#inputUserNewPassword').val()
-    let newPassConfirm=$('#inputUserNewPasswordConfirm').val()
-
-    if(newPass != newPassConfirm)
-    {
-        alert('Mật khẩu mới phải trùng khớp')
-    }
-    else
-    {
-        $.ajax({
-            url: '/user/resetPassword',
-            method:'post',
-            data:{
-                newPass,ajax:true
-            },
-            success:(data)=>{
-                $('#alertUserChangePasswordSuccess').removeClass('d-none')
-                setTimeout(() => {
-                    window.location.href = '/user/'
-                },1000);
-            }
-        })
-    }
-
-})
-
-
 // const inputWithdrawAmountToWithdraw = document.getElementById(
 //     'inputWithdrawAmountToWithdraw'
 // )

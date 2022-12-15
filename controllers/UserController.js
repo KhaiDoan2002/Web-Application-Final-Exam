@@ -11,27 +11,34 @@ const CreditCard = require('../models/CreditCard')
 const OTP = require('../models/OTP')
 const Provider = require('../models/Provider')
 const { stopWithdraw, normalizeDate, checkErrorInput } = require('../middleware/functions')
+const flash = require('express-flash')
 
-function fileValidator(req) {
+function fileValidator(req) 
+{
     let message
-    if (!req.files['frontID']) {
+    if (!req.files['frontID']) 
+    {
         message = 'Không được bỏ trống mặt trước CMND'
-    } else if (!req.files['backID']) {
+    } else if (!req.files['backID']) 
+    {
         message = 'Không được bỏ trống mặt sau CMND'
     }
     return message
 }
 
-function hashPassword(password) {
+function hashPassword(password) 
+{
     let saltRounds = 10;
     let salt = bcrypt.genSaltSync(saltRounds)
     return bcrypt.hashSync(password, salt)
 }
 
-function sendEmailVerify(req, res, email) {
+function sendEmailVerify(req, res, email) 
+{
     const { JWT_SECRET } = process.env
     const code = `${Math.floor(1000 + Math.random() * 9000)}`
-    return jwt.sign({ code: code }, JWT_SECRET, { expiresIn: '1m' }, (err, codeToken) => {
+    return jwt.sign({ code: code }, JWT_SECRET, { expiresIn: '1m' }, (err, codeToken) => 
+    {
         if (err)
             console.log(err)
         else {
@@ -131,7 +138,7 @@ const UserController = {
                 return {
                     id: h._doc._id,
                     action: h._doc.action,
-                    amount: h._doc.amount,
+                    amount: h._doc.amount.toLocaleString("vi-vn"),// chuyển tiền theo format đề
                     createdAt: normalizeDate(h._doc.createdAt),
                     status: h._doc.status,
                     icon: icon,
@@ -155,7 +162,7 @@ const UserController = {
             status = 'Yêu cầu cung cấp lại ảnh CMND'
         }
         res.render('index', {
-            balance,
+            balance:balance.toLocaleString("vi-vn"),
             data: context,
             fullname: user.fullname,
             username: user.username,
@@ -165,6 +172,7 @@ const UserController = {
             address: user.address,
             status: status,
             requestID: requestID,
+            success:req.flash('success') || req.session.success
         })
     },
     getRegister: function (req, res) {
@@ -189,27 +197,6 @@ const UserController = {
             const { email } = req.body
             return fs.mkdir(userDir, () => {
                 const hash = hashPassword(password)
-                // Create transport
-
-                const transporter = nodemailer.createTransport({
-                    host: 'mail.phongdaotao.com',
-                    port: 25,
-                    auth: {
-                        user: 'sinhvien@phongdaotao.com ',
-                        pass: 'svtdtu'
-                    }
-                });
-
-                const msg = {
-                    from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
-                    to: `${email}`,
-                    subject: "WELCOME TO SUD ✔",
-                    text: "Đây là thông tin về tài khoản của bạn",
-                    html: `
-                        <h2>Username: ${username}</h2>
-                        <h2>Password: ${password}</h2>
-                    `
-                }
                 // Moving file
                 let imagePath = []
                 for (file in req.files) {
@@ -236,13 +223,7 @@ const UserController = {
 
                 return new User(user).save()
                     .then(() => {
-                        transporter.sendMail(msg, (err, success) => {
-                            if (err)
-                                console.log(err)
-                            else
-                                console.log('Email send successfully')
-                        })
-                        req.flash('success', "Đăng ký thành công, vui lòng đăng nhập")
+                        req.flash('success', `User: ${username}, Password:${password}`)
                         res.redirect('/user/login')
                     })
                     .catch(() => {
@@ -299,9 +280,17 @@ const UserController = {
                         }
 
                         account.failAccess = (account.failAccess + 1)
+                        // 3 lần sẽ khóa 10ph
                         if (account.failAccess == 3) {
+                            req.flash('fail', true)
+                            account.status = 'Disable'
+                            account.blockAt = Date.now()
+                        }
+                        // 5 lần sẽ khóa vĩnh viễn
+                        if (account.failAccess == 5) {
                             account.status = 'Locked'
                             account.blockAt = Date.now()
+                            account.dead=true
                         }
                         req.session.failAccess = account.failAccess
                         const block = new BlockUser({
@@ -313,7 +302,6 @@ const UserController = {
                             if (err)
                                 console.log(err)
                             else {
-                                req.flash('fail', true)
                                 res.redirect('/user/login');
                             }
                         })
@@ -325,7 +313,7 @@ const UserController = {
                             jwt.sign({
                                 username: account.username,
                             }, JWT_SECRET, {
-                                expiresIn: '15m'
+                                expiresIn: '10m'
                             }, (err, token) => {
                                 if (err) {
                                     req.flash('error', 'Đăng nhập thất bại: ' + err)
@@ -355,7 +343,7 @@ const UserController = {
                 message = result[m].msg
                 break
             }
-            req.flash('error', message)
+            req.flash('error', message || 'Sai mật khẩu')
             req.flash('username', username)
             return res.redirect('/user/login')
 
@@ -380,8 +368,8 @@ const UserController = {
     },
 
     postResetPassword: function (req, res) {
-        let result = validationResult(req)
-        if (result.errors.length === 0) {
+        if(req.body.ajax)
+        {
             User.findOneAndUpdate({ username: req.session.username }, {
                 password: hashPassword(req.body.newPass),
                 active: true
@@ -389,29 +377,48 @@ const UserController = {
                 if (err)
                     console.log(err)
                 else
+                {
+                    req.session.success='Thay đổi mật khẩu thành công'
                     res.redirect('/user/')
+                }
             })
-        } else {
-            result = result.mapped()
-            let message
-            for (m in result) {
-                message = result[m].msg
-                break
-            }
-            const { newPass, rePass } = req.body
-            req.flash('error', message)
-            req.flash('rePass', rePass)
-            req.flash('newPass', newPass)
-            res.redirect('/user/')
         }
-
+        else
+        {
+            let result = validationResult(req)
+            if (result.errors.length === 0) {
+                User.findOneAndUpdate({ username: req.session.username }, {
+                    password: hashPassword(req.body.newPass),
+                    active: true
+                }, (err, data) => {
+                    if (err)
+                        console.log(err)
+                    else{
+                        res.redirect('/user/')                        
+                    }
+                })
+            } else {
+                result = result.mapped()
+                let message
+                for (m in result) {
+                    message = result[m].msg
+                    break
+                }
+                const { newPass, rePass } = req.body
+                req.flash('error', message)
+                req.flash('rePass', rePass)
+                req.flash('newPass', newPass)
+                res.redirect('/user/')
+            }    
+        }    
     },
 
     getRestorePassword: function (req, res) {
         const error = req.flash('error') || ''
         const email = req.flash('email') || ''
         const phone = req.flash('phone') || ''
-        res.render('restorePassword', { error, email, phone })
+        const otp = req.flash('otp') || ''
+        res.render('restorePassword', { error, email, phone,otp })
     },
 
     postRestorePassword: function (req, res) {
@@ -422,7 +429,16 @@ const UserController = {
             req.session.phone = phone
             res.cookie('email', email)
             res.cookie('phone', phone)
-            sendEmailVerify(req, res, email)
+            const otp = `${Math.floor(1000 + Math.random() * 9000)}`
+            req.flash('otp',otp)
+
+            new Token({
+                UserEmail:email,
+                code:otp,
+                token:'token'
+            }).save()
+            res.redirect('/user/verifyOTP')
+            // sendEmailVerify(req, res, email)
         } else {
             result = result.mapped()
             let message
@@ -441,7 +457,8 @@ const UserController = {
     getVerifyOTP: function (req, res) {
         const error = req.flash('error') || ''
         const code = req.flash('code') || ''
-        res.render('verifyOTP', { error, code })
+        const otp = req.flash('otp') || ''
+        res.render('verifyOTP', { error, code,otp})
     },
 
     postVerifyOTP: function (req, res) {
@@ -484,6 +501,7 @@ const UserController = {
     postResetPasswordByOTP: function (req, res) {
         let result = validationResult(req)
         if (result.errors.length === 0) {
+            console.log('a')
             User.findOneAndUpdate({ username: req.session.username }, {
                 password: hashPassword(req.body.newPass),
                 active: true
@@ -695,58 +713,38 @@ const UserController = {
                     status: (amountInt >= 5000000) ? 'Đang chờ duyệt' : 'Hoàn thành',
                 }
                 const OTPCode = `${Math.floor(100000 + Math.random() * 900000)}`
-                const transporter = nodemailer.createTransport({
-                    host: 'mail.phongdaotao.com',
-                    port: 25,
-                    auth: {
-                        user: 'sinhvien@phongdaotao.com ',
-                        pass: 'svtdtu'
-                    }
-                });
-                const msg = {
-                    from: '"Ví Điện tử SUD 🪙" <sudtechnology.group@gmail.com>',
-                    to: `${email}`,
-                    subject: "Mã OTP xác nhận chuyển tiền ✔",
-                    text: "Vui lòng không tiết lộ mã này với bất kì ai",
-                    html: `
-                                <h2>OTP: ${OTPCode}</h2>
-                            `
-                }
                 const otp = {
                     UserEmail: email,
                     code: OTPCode,
                 }
-
                 return new OTP(otp).save()
-                    .then(() => {
-                        transporter.sendMail(msg, (err, success) => {
-                            if (err) {
-                                console.log(err)
-                            } else {
-                                console.log('Sending OTP successfully')
-                                req.flash('name', receiver.fullname);
-                                req.flash('date', normalizeDate(new Date()))
-                                req.flash('status', amountInt >= 5000000 ? 'Chờ xác nhận' : 'Hoàn thành')
-                                req.flash('amount', amountInt);
-                                req.flash('note', trade.note);
-                                req.session.phone = phone;
-                                req.session.email = email;
-                                req.session.trade = trade;
-                                res.redirect('/user/transfer/confirm');
-                            }
-                        })
+                    .then(() => 
+                    {
+                        console.log('Sending OTP successfully')
+                        req.flash('name', receiver.fullname);
+                        req.flash('otp',OTPCode)
+                        req.flash('date', normalizeDate(new Date()))
+                        req.flash('status', amountInt >= 5000000 ? 'Chờ xác nhận' : 'Hoàn thành')
+                        req.flash('amount', amountInt);
+                        req.flash('note', trade.note);
+                        req.session.phone = phone;
+                        req.session.email = email;
+                        req.session.trade = trade;
+                        res.redirect('/user/transfer/confirm');
                     })
             })
             .catch(next);
     },
 
-    getTransferConfirm: function (req, res, next) {
+    getTransferConfirm: function (req, res, next) 
+    {
+        const otp=req.flash('otp') || '';
         const receiver = req.flash('name') || '';
         const amount = req.flash('amount') || 0;
         const note = req.flash('note') || '';
         const date = req.flash('date')
         const status = req.flash('status')
-        return res.render('confirm', { receiver, amount, note, status, date });
+        return res.render('confirm', { receiver, amount, note, status, date,otp});
     },
 
     postTransferConfirm: function (req, res, next) {

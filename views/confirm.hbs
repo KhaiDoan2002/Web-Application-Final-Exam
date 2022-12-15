@@ -41,9 +41,13 @@
                         <!-- Mã OTP -->
                         <div class="form-group d-flex flex-column gap-1">
                             <label for="inputHistoryPhoneCardDetailCardCode">Mã OTP</label>
-                            <input name="code" type="text" class="form-control" id="inputHistoryPhoneCardDetailCardCode"
-                                placeholder="Mã OTP" />
+                            <input name="code" type="text" class="form-control" id="inputHistoryPhoneCardDetailCardCode"placeholder="Mã OTP" />
                         </div>
+                        {{#if otp}} 
+                        <div class="alert alert-success">
+                            {{otp}}
+                        </div>
+                        {{/if}}
                         <button type="submit" class="btn btn-success">
                             Xác nhận
                         </button>

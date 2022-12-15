@@ -77,7 +77,12 @@ const UserSchema = new Schema({
                 status: String,
             }
         ]
+    },
+    dead:
+    {
+        type:Boolean
     }
+
 })
 
 module.exports = mongoose.model('User', UserSchema)

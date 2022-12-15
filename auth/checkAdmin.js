@@ -1,4 +1,5 @@
-module.exports = (req, res, next) => {
+module.exports = (req, res, next) => 
+{
     if (req.body.username === 'admin')
         next()
     else

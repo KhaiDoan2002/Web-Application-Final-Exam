@@ -53,14 +53,12 @@ h6 span {
     min-height: 100vh;
 }
 
-[type="checkbox"]:checked,
-[type="checkbox"]:not(:checked) {
+[type="checkbox"]:checked,[type="checkbox"]:not(:checked) {
     position: absolute;
     left: -9999px;
 }
 
-.checkbox:checked+label,
-.checkbox:not(:checked)+label {
+.checkbox:checked+label,.checkbox:not(:checked)+label {
     position: relative;
     display: block;
     text-align: center;
@@ -73,8 +71,7 @@ h6 span {
     background-color: #ffeba7;
 }
 
-.checkbox:checked+label:before,
-.checkbox:not(:checked)+label:before {
+.checkbox:checked+label:before,.checkbox:not(:checked)+label:before {
     position: absolute;
     display: block;
     width: 36px;
@@ -130,8 +127,7 @@ h6 span {
     transition: all 600ms ease-out;
 }
 
-.card-front,
-.card-back {
+.card-front,.card-back {
     width: 100%;
     height: 100%;
     background-color: #2a2b38;
@@ -170,7 +166,6 @@ h6 span {
     display: block;
 }
 
-
 .form-group {
     position: relative;
     display: block;
@@ -197,8 +192,7 @@ h6 span {
     box-shadow: 0 4px 8px 0 rgba(21, 21, 21, .2);
 }
 
-.form-style:focus,
-.form-style:active {
+.form-style:focus,.form-style:active {
     border: none;
     outline: none;
     box-shadow: 0 4px 8px 0 rgba(21, 21, 21, .2);
@@ -299,22 +293,24 @@ h6 span {
     animation: btn-appear 1s;
 }
 
-.btn:active,
-.btn:focus {
+.btn:active,.btn:focus 
+{
     background-color: #102770;
     color: #ffeba7;
     box-shadow: 0 8px 24px 0 rgba(16, 39, 112, .2);
 }
 
-.btn:hover {
+.btn:hover 
+{
     background-color: #102770;
     color: #ffeba7;
     box-shadow: 0 8px 24px 0 rgba(16, 39, 112, .2);
 }
 
-
-@keyframes btn-appear {
-    from {
+@keyframes btn-appear 
+{
+    from 
+    {
         opacity: 0;
         padding: 0;
     }
@@ -325,7 +321,8 @@ h6 span {
     }
 }
 
-.logo {
+.logo 
+{
     position: absolute;
     top: 30px;
     right: 30px;
@@ -334,8 +331,109 @@ h6 span {
     transition: all 250ms linear;
 }
 
-.logo img {
+.logo img 
+{
     height: 26px;
     width: auto;
     display: block;
+}
+.center-box
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.white-box
+{
+    background-color: white;
+}
+.grey-box
+{
+    background-color: #eee;
+}
+/*css trang restorePassword*/
+.login-div 
+{
+    width:330px;
+    height: 450px;
+    padding: 25px 35px 35px 35px;
+    border-radius: 35px;
+    background: white;
+    box-shadow: 13px 13px 20px #cbced1,-13px -13px 20px #ecf0f3;
+}
+.title 
+{
+    text-align: center;
+    font-size: 28px;
+    padding-top: 15px;
+    letter-spacing: 0.5px;
+}
+.fields 
+{
+    width: 100%;
+    padding: 35px 5px 5px 0px;
+
+}
+.fields input 
+{
+    border: none;
+    outline:none;
+    background: none;
+    font-size: 18px;
+    color: #555;
+    margin-left: 10px;
+    padding: 20px 10px 10px 5px;
+}
+.Email, .Phone
+{
+    margin-bottom: 35px;
+    border-radius: 15px;
+    display: flex;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #ffffff;
+}
+.Email i, .Phone i
+{
+    padding-left: 5px;
+    margin: 20px 0px 0px 10px;
+}
+.signin-button 
+{
+    outline: none;
+    border:none;
+    cursor: pointer;
+    width:100%;
+    height: 45px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Lato', sans-serif;
+    color:#fff;
+    text-align: center;
+    background: #1995c3;
+    box-shadow: 3px 3px 8px #b1b1b1,-3px -3px 8px #ffffff;
+    transition: 0.5s;
+}
+.signin-button:hover 
+{
+    background:#2f3ddb;
+}
+/* .field input:focus ~ label
+{
+    box-shadow: inset 2px 2px 5px #babecc,inset -1px -1px 2px #ffffff73;
+} */
+.otp-div 
+{
+    width:330px;
+    height: 350px;
+    padding: 25px 35px 35px 35px;
+    border-radius: 35px;
+    background: #ecf0f3;
+    box-shadow: 13px 13px 20px #cbced1,-13px -13px 20px #ecf0f3;
+    margin-left:500px;
+    margin-top: 100px;
+}
+.user-input:focus
+{
+    background: white !important;
 }

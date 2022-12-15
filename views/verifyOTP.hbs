@@ -1,5 +1,4 @@
-<div class="dark-body">
-
+<!--<div class="dark-body">
     <div class="section">
         <div class="container">
             <div class="row full-height justify-content-center">
@@ -13,8 +12,7 @@
                                             <div class="section text-center">
                                                 <h4 class="mb-4 pb-3">Nhập mã xác nhận</h4>
                                                 <div class="form-group">
-                                                    <input type="text" name="code" value="{{code}}" class="form-style"
-                                                        placeholder="Mã OTP" autocomplete="off">
+                                                    <input type="text" name="code" value="{{code}}" class="form-style"placeholder="Mã OTP" autocomplete="off">
                                                     <i class="input-icon uil uil-at"></i>
                                                     <span id="timer"></span>
                                                 </div>
@@ -26,14 +24,15 @@
                                                 <div class="alert alert-danger mt-2">
                                                     {{error}}
                                                 </div>
+                                                {{/if}}                                          
+                                                {{#if otp}}
+                                                <div class="alert alert-success mt-2">
+                                                    {{otp}}
+                                                </div>
                                                 {{/if}}
-
                                                 <div id="verify-btn">
-                                                    <button id="submit-verify" type="submit" class="dark-btn mt-4">Xác
-                                                        nhận</button>
-                                                    <a id="resend-btn" href="/user/resendOTP" style="display: none;"
-                                                        class="dark-btn mt-4">Gữi lại
-                                                        mã</a>
+                                                    <button id="submit-verify" type="submit" class="dark-btn mt-4">Xác nhận</button>
+                                                    <a id="resend-btn" href="/user/resendOTP" style="display: none;"class="dark-btn mt-4">Gữi lại mã</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -46,4 +45,30 @@
             </div>
         </div>
     </div>
-</div>
+</div>--->
+
+<form method="post" action="" >
+    <div class="otp-div">
+        <div class="title">Nhập mã xác nhận</div>
+        <div class="fields">
+            <input type="text" name="code" value="{{code}}" class="form-style"placeholder="Mã OTP" autocomplete="off">
+            <span id="timer"></span>
+        </div>
+
+        {{#if error}}
+            <div class="alert alert-danger mt-2">
+                {{error}}
+            </div>
+        {{/if}}
+        <div id="verify-alert">
+
+        {{#if otp}}
+            <div class="alert alert-success mt-2">
+                {{otp}}
+            </div>
+        {{/if}}
+        
+        <button id="submit-verify" type="submit" class="signin-button">Xác nhận</button>
+        <a id="resend-btn" href="/user/resendOTP" style="display: none;"class="dark-btn mt-4">Gữi lại mã</a>
+    </div>
+</form>

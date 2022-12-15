@@ -12,18 +12,16 @@ module.exports = [
                     if (!account)
                         throw new Error('Tài khoản không tồn tại')
                     else {
-                        if (account.email !== 'admin@gmail.com') {
-                            if (account.failAccess >= 3) {
-                                throw new Error("Tài khoản của bạn đã bị khóa do nhập sai mật khẩu nhiều lần, vui lòng liên hệ quản trị viên để được hỗ trợ")
-                            }
-                            if (account.status === 'Disabled')
+                        if (account.email !== 'admin@gmail.com') 
+                        {
+                            if (account.status === 'Locked')
                                 throw new Error('Tài khoản này đã bị vô hiệu hóa, vui lòng liên hệ tổng đài 18001008')
-                            return BlockUser.findOne({ username: value })
-                                .then(block => {
-                                    if (block) {
-                                        throw new Error('Tài khoản của bạn đang bị tạm khóa vui lòng thử lại sau 1 phút')
-                                    }
-                                })
+                            if (account.failAccess >= 3) {
+                                return BlockUser.findOne({ username: value })
+                                .then(block => 
+                                {
+                                })                            
+                            }
                         }
                         return true
                     }
