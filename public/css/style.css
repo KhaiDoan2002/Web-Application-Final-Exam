@@ -430,10 +430,13 @@ h6 span {
     border-radius: 35px;
     background: #ecf0f3;
     box-shadow: 13px 13px 20px #cbced1,-13px -13px 20px #ecf0f3;
-    margin-left:500px;
-    margin-top: 100px;
 }
 .user-input:focus
 {
     background: white !important;
+}
+#timer
+{
+    transform: translateX(45%);
+    margin-top: 3px;
 }

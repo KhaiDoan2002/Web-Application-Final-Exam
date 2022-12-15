@@ -46,29 +46,31 @@
         </div>
     </div>
 </div>--->
+<div class="center-box white-box" style="height: 100vh">
+    <form method="post" action="">
+        <div class="otp-div">
+            <div class="title">Nhập mã xác nhận</div>
+            <div class="fields">
+                <input type="text" name="code" value="{{code}}" class="form-style"placeholder="Mã OTP" autocomplete="off">
+                <div id="timer"></div>
+            </div>
 
-<form method="post" action="" >
-    <div class="otp-div">
-        <div class="title">Nhập mã xác nhận</div>
-        <div class="fields">
-            <input type="text" name="code" value="{{code}}" class="form-style"placeholder="Mã OTP" autocomplete="off">
-            <span id="timer"></span>
+            {{#if error}}
+                <div class="alert alert-danger mt-2">
+                    {{error}}
+                </div>
+            {{/if}}
+            <div id="verify-alert">
+
+            {{#if otp}}
+                <div class="alert alert-success mt-2">
+                    {{otp}}
+                </div>
+            {{/if}}
+            
+            <button id="submit-verify" type="submit" class="signin-button">Xác nhận</button>
+            <a id="resend-btn" href="/user/resendOTP" style=""class="dark-btn mt-4 d-none">Gữi lại mã</a>
         </div>
+    </form>
+</div>
 
-        {{#if error}}
-            <div class="alert alert-danger mt-2">
-                {{error}}
-            </div>
-        {{/if}}
-        <div id="verify-alert">
-
-        {{#if otp}}
-            <div class="alert alert-success mt-2">
-                {{otp}}
-            </div>
-        {{/if}}
-        
-        <button id="submit-verify" type="submit" class="signin-button">Xác nhận</button>
-        <a id="resend-btn" href="/user/resendOTP" style="display: none;"class="dark-btn mt-4">Gữi lại mã</a>
-    </div>
-</form>

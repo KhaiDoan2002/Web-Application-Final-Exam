@@ -47,7 +47,7 @@ function countDownVerify()
         clearInterval(x)
         document.getElementById('timer').innerHTML = ''
         document.getElementById('verify-alert').innerHTML = `<div class="alert alert-danger mt-2">Mã OTP đã hết hạn</div>`
-        document.getElementById('resend-btn').style.display = 'inline-flex'
+        $('#resend-btn').removeClass('d-none')
     }, 60000);
 
     setTimeout(() => 
