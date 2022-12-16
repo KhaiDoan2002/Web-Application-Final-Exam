@@ -1,11 +1,12 @@
 <nav class="navbar navbar-expand navbar-light bg-faded">
     <div class="container">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand">Trang Chủ Admin</a>
         <div class="dropdown open">
             <button class="border-0 bg-transparent dropdown-toggle" type="button" id="triggerId"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img src="https://via.placeholder.com/30" alt="" class="rounded-2" />
             </button>
+            <div>{{username}}</div>
             <div class="dropdown-menu" aria-labelledby="triggerId">
                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modelUserInformation">
                     Xem thông tin
@@ -249,120 +250,6 @@
                 </div>
             </div>
         </div>
-        {{/each}}
-        <!-- Modal History Transfer Detail -->
-
-        {{!-- <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Chi tiết giao dịch</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex flex-column gap-2">
-                        <!-- Ngày giao dịch -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailDate">Ngày giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailDate"
-                                placeholder="Ngày giao dịch" disabled />
-                        </div>
-                        <!-- Mã giao dịch -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailCode">Mã giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailCode"
-                                placeholder="Mã giao dịch" disabled />
-                        </div>
-                        <!-- Trạng thái -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailStatus">Trạng thái</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailStatus"
-                                placeholder="Trạng thái" disabled />
-                        </div>
-                        <!-- Số tiền -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailMoney">Số tiền</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailMoney"
-                                placeholder="Số tiền" disabled />
-                        </div>
-                        <!-- Sđt  người nhận -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailPhone">SĐT người nhận</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailPhone"
-                                placeholder="SĐT người nhận" disabled />
-                        </div>
-                        <!-- Tên người nhận -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailReceiver">Tên gười nhận</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailReceiver"
-                                placeholder="Người nhận" disabled />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Huỷ
-                        </button>
-                        <button type="button" class="btn btn-primary">Xác nhận</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="modelHistoryTransferDetail" tabindex="-1" role="dialog"
-            aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Chi tiết giao dịch</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex flex-column gap-2">
-                        <!-- Ngày giao dịch -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailDate">Ngày giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailDate"
-                                placeholder="Ngày giao dịch" disabled />
-                        </div>
-                        <!-- Mã giao dịch -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailCode">Mã giao dịch</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailCode"
-                                placeholder="Mã giao dịch" disabled />
-                        </div>
-                        <!-- Trạng thái -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailStatus">Trạng thái</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailStatus"
-                                placeholder="Trạng thái" disabled />
-                        </div>
-                        <!-- Số tiền -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailMoney">Số tiền</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailMoney"
-                                placeholder="Số tiền" disabled />
-                        </div>
-                        <!-- Sđt  người nhận -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailPhone">SĐT người nhận</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailPhone"
-                                placeholder="SĐT người nhận" disabled />
-                        </div>
-                        <!-- Tên người nhận -->
-                        <div class="form-group d-flex flex-column gap-1">
-                            <label for="inputHistoryTransferDetailReceiver">Tên gười nhận</label>
-                            <input type="text" class="form-control" id="inputHistoryTransferDetailReceiver"
-                                placeholder="Người nhận" disabled />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Huỷ
-                        </button>
-                        <button type="button" class="btn btn-primary">Xác nhận</button>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        <!--  Modal History Phone Card Detail -->
-        
+        {{/each}}     
     </div>
 </main>

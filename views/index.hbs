@@ -1,11 +1,12 @@
 <nav class="navbar navbar-expand navbar-light bg-faded">
     <div class="container">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand">TRANG CHỦ</a>
         <div class="dropdown open">
             <button class="border-0 bg-transparent dropdown-toggle" type="button" id="triggerId"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img src="https://via.placeholder.com/30" alt="" class="rounded-2" />
             </button>
+            <div>{{username}}</div>
             <div class="dropdown-menu" aria-labelledby="triggerId">
                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modelUserInformation">
                     Xem thông tin
@@ -106,14 +107,12 @@
                                 </td>
                             </tr>
                             {{/each}}
-
-
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
+        
         <!-- Modal Deposit -->
         <div class="modal fade" id="modelDeposit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
             aria-hidden="true">
@@ -194,7 +193,6 @@
                             Thay đổi mật khẩu thành công
                         </span>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Huỷ
